@@ -1,0 +1,32 @@
+{
+  "name": "xmpp-ftw-item-parser",
+  "version": "0.1.0",
+  "description": "Used to parse \"standard\" XMPP pubsub payloads both from XML→JSON, and build stanzas JSON→XML",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Not yet implemented\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lloydwatkin/xmpp-ftw-item-parser.git"
+  },
+  "keywords": [
+    "xmpp",
+    "xmpp-ftw",
+    "xml",
+    "json",
+    "rss",
+    "atom",
+    "activitystreams",
+    "activitystrea.ms",
+    "parse",
+    "parser"
+  ],
+  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
+  "license": "Apache 2.0",
+  "readmeFilename": "README.md",
+  "gitHead": "b710932e510f5c6e60d949611346c38e3d1489e4",
+  "bugs": {
+    "url": "https://github.com/lloydwatkin/xmpp-ftw-item-parser/issues"
+  }
+}
