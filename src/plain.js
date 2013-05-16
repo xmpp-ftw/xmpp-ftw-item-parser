@@ -1,4 +1,4 @@
-var builder = require('node-xmpp')
+var builder = require('ltx')
 
 exports.parse = function(item, entity) {
     if (0 != Object.keys(entity).length) return;
