@@ -1,5 +1,5 @@
-var atom    = require('./atom')
-  , plain   = require('./plain')
+var atom    = require('./src/atom')
+  , plain   = require('./src/plain')
 
 var parsers = [
     atom,
