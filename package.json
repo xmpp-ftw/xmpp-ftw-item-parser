@@ -1,6 +1,6 @@
 {
   "name": "xmpp-ftw-item-parser",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Used to parse \"standard\" XMPP pubsub payloads both from XML→JSON, and build stanzas JSON→XML",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,9 @@
     "parse",
     "parser"
   ],
+  "dependencies": {
+    "ltx": "~0.2.2"
+  },
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "Apache 2.0",
   "readmeFilename": "README.md",
