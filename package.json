@@ -4,7 +4,7 @@
   "description": "Used to parse \"standard\" XMPP pubsub payloads both from XML→JSON, and build stanzas JSON→XML",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Not yet implemented\" && exit 0"
+    "test": "./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "url": "https://github.com/lloydwatkin/xmpp-ftw-item-parser/issues"
   },
   "devDependencies": {
-    "mocha": "~1.9.0"
+    "mocha": "~1.9.0",
+    "should": "~1.2.2"
   }
 }
