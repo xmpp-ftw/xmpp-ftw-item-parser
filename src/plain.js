@@ -2,11 +2,7 @@ var builder = require('ltx')
 
 exports.parse = function(item, entity) {
     if (0 != Object.keys(entity).length) return
-    try {
-        entity.body = item.getChild('body').children.join('')
-    } catch (e) {
-        console.error(e)
-    }
+    entity.body = item.getChild('body').children.join('')
 }
 
 exports.build = function(data, p) {

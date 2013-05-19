@@ -9,7 +9,11 @@ var parsers = [
 exports.parse = function(item) {
    var entity = {}
    parsers.forEach(function(parser) {
-       parser.parse(item, entity)
+       try {
+           parser.parse(item, entity)
+       } catch (e) {
+           console.error(e)
+       }
    })
    
    return entity

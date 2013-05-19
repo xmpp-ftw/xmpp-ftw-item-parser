@@ -1,7 +1,6 @@
 require('mocha')
-require('should')
-
-var parser = require('../src/plain')
+var should = require('should')
+  , parser = require('../src/plain')
   , ltx    = require('ltx')
 
 describe('Parsing posts with \'plain\'', function() {
@@ -20,11 +19,15 @@ describe('Parsing posts with \'plain\'', function() {
         entity.body.should.equal('This is <i>some</i> text')
     })
 
-    it('shouldn\'t throw exception if missing expected element', function() {
+    it('should throw exception if missing expected element', function(done) {
         var entity = {}
         var badItem = ltx.parse('<item/>')
-        parser.parse(badItem, entity)
-        entity.should.eql({})
+        try {
+            parser.parse(badItem, entity)
+        } catch (e) {
+            return done()
+        }
+        should.fail('No exception was thrown')
     })
 })
 
