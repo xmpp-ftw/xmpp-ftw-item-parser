@@ -1,7 +1,7 @@
 require('mocha')
 
 var should = require('should')
-  , parser = require('../src/atom')
+  , parser = require('../../src/atom')
   , ltx    = require('ltx')
 
 describe('Parsing posts with \'atom\'', function() {

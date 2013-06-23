@@ -4,7 +4,7 @@
   "description": "Used to parse \"standard\" XMPP pubsub payloads both from XML→JSON, and build stanzas JSON→XML",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+      "test": "./node_modules/.bin/mocha -R spec --recursive ./test/lib"
   },
   "repository": {
     "type": "git",

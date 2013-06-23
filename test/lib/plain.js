@@ -1,6 +1,6 @@
 require('mocha')
 var should = require('should')
-  , parser = require('../src/plain')
+  , parser = require('../../src/plain')
   , ltx    = require('ltx')
 
 describe('Parsing posts with \'plain\'', function() {
