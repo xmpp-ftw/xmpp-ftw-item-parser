@@ -1,10 +1,10 @@
 var NS_ATOM = "http://www.w3.org/2005/Atom"
 var entry
-var linkAttributes = ['title', 'rel', 'href', 'type']
+var linkAttributes = ['title', 'rel', 'href', 'type', 'hreflang', 'length']
 var topLevelElements = ['title', 'id', 'updated', 'published', 'summary']
 
 var addLinks = function(entity) {
- 
+    var links
     if (0 == (links = entry.getChildren('link')).length) return
 
     entity.links = []
@@ -18,6 +18,7 @@ var addLinks = function(entity) {
 }
 
 var addContent = function(entity) {
+    var content
     if (!(content = entry.getChild('content'))) return
     entity.content = {
        type: content.attrs.type || 'text',
@@ -29,6 +30,7 @@ var addContent = function(entity) {
 
 var authorDetails = ['name', 'email', 'uri', 'id']
 var addAuthor = function(entity) {
+    var author
     if (!(author = entry.getChild('author'))) return
     entity.author = {}
     authorDetails.forEach(function(attribute) {
@@ -38,6 +40,7 @@ var addAuthor = function(entity) {
 }
 
 var addContributors = function(entity) {
+    var contributors
     if (0 == (contributors = entry.getChildren('contributor')).length) return
     entity.contributors = []
     contributors.forEach(function(contributor) {

@@ -69,6 +69,31 @@ describe('Parsing posts with \'atom\'', function() {
         })
     })
 
+    it('Adds links to the entry', function() {
+        var entity = {}
+        var item = ltx.parse(
+            '<item><entry xmlns="' + NS_ATOM + '">'
+          + '<link title="A link" rel="alternative" '
+              + 'href="http://buddycloud.org/blog/post-1" type="text/html" />'
+          + '<link hreflang="en_GB" length="64" '
+              + 'href="http://buddycloud.co.uk/blog/post-1" />'
+          + '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.links.length.should.equal(2)
+        entity.links[0].should.eql({
+            title: 'A link',
+            rel: 'alternative',
+            href: 'http://buddycloud.org/blog/post-1',
+            type: 'text/html'
+        })
+        entity.links[1].should.eql({
+            href: 'http://buddycloud.co.uk/blog/post-1',
+            hreflang: 'en_GB',
+            length: '64'
+        })
+    })
+
 })
 
 describe('Building stanzas with \'atom\'', function() {})
