@@ -94,6 +94,28 @@ describe('Parsing posts with \'atom\'', function() {
         })
     })
 
+    it('Adds author details', function() {
+        var entity = {}
+        var item = ltx.parse(
+            '<item><entry xmlns="' + NS_ATOM + '">'
+          + '<author>'
+              + '<name>Lloyd Watkin</name>'
+              + '<email>lloyd@evilprofessor.co.uk</email>'
+              + '<uri>http://evilprofessor.co.uk</uri>'
+              + '<id>1</id>'
+          + '</author>'
+          + '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            author: {
+                name: 'Lloyd Watkin', 
+                email: 'lloyd@evilprofessor.co.uk',
+                uri: 'http://evilprofessor.co.uk',
+                id: '1'
+            } 
+        })    
+    })
 })
 
 describe('Building stanzas with \'atom\'', function() {})
