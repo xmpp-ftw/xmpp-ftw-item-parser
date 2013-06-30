@@ -20,3 +20,6 @@ npm i --save xmpp-ftw-item-parser
 # Examples
 
 
+# Notes
+
+* The atom builder does not currently build the 'rights' element. If you require this please raise an issue or, better still, send me a pull request
