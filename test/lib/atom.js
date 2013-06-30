@@ -174,7 +174,8 @@ describe('Building stanzas with \'atom\'', function() {
                 title: 'title-value',
                 updated: 'updated-value',
                 summary: 'summary-value',
-                published: 'published-value'
+                published: 'published-value',
+                content: 'content-value'
             }
         }
         var stanza = ltx.parse('<item/>')
@@ -185,6 +186,7 @@ describe('Building stanzas with \'atom\'', function() {
         entry.getChildText('updated').should.equal(entity.atom.updated)
         entry.getChildText('summary').should.equal(entity.atom.summary)
         entry.getChildText('published').should.equal(entity.atom.published)
+        entry.getChildText('content').should.equal(entity.atom.content)
     })
 
     it('Can add a single author', function() {
@@ -252,5 +254,21 @@ describe('Building stanzas with \'atom\'', function() {
         contributors[1].getChildText('name')
             .should.equal(entity.atom.contributors[1].name)        
     })
- 
+
+    it('Can add categories', function() {
+        var entity = {
+            atom: {
+                categories: [ 'one', 'two', 'three' ]
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var entry = stanza.getChild('entry')
+        entry.getChildren('category').length.should.equal(3)
+        var categories = entry.getChildren('category')
+        categories[0].attrs.term.should.equal('one')
+        categories[1].attrs.term.should.equal('two')
+        categories[2].attrs.term.should.equal('three')
+    })
+
 })
