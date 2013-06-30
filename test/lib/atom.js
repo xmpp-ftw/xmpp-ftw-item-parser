@@ -2,9 +2,9 @@ var should = require('should')
   , parser = require('../../lib/atom')
   , ltx    = require('ltx')
 
-describe('Parsing posts with \'atom\'', function() {
+var ATOM_NS = "http://www.w3.org/2005/Atom"
 
-    var NS_ATOM = "http://www.w3.org/2005/Atom"
+describe('Parsing posts with \'atom\'', function() {
 
     var topLevelElements = {
         title: 'Back to the future',
@@ -25,7 +25,7 @@ describe('Parsing posts with \'atom\'', function() {
 
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_ATOM + '">'
+            '<item><entry xmlns="' + ATOM_NS + '">'
           + '<id>' + topLevelElements.id + '</id>'
           + '<updated>' + topLevelElements.updated + '</updated>'
           + '<published>' + topLevelElements.published + '</published>'
@@ -41,7 +41,7 @@ describe('Parsing posts with \'atom\'', function() {
         var entity = {}
         var content = 'Hello world!'
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_ATOM + '">'
+            '<item><entry xmlns="' + ATOM_NS + '">'
           + '<content>' + content + '</content>'
           + '</entry></item>'
         )
@@ -55,7 +55,7 @@ describe('Parsing posts with \'atom\'', function() {
         var language = 'en_GB'
         var type = 'xhtml'
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_ATOM + '">'
+            '<item><entry xmlns="' + ATOM_NS + '">'
           + '<content xml:lang="' + language + '" type="' + type + '">' 
           + content
           + '</content>'
@@ -70,7 +70,7 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds links to the entry', function() {
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_ATOM + '">'
+            '<item><entry xmlns="' + ATOM_NS + '">'
           + '<link title="A link" rel="alternative" '
               + 'href="http://buddycloud.org/blog/post-1" type="text/html" />'
           + '<link hreflang="en_GB" length="64" '
@@ -95,7 +95,7 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds author details', function() {
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_ATOM + '">'
+            '<item><entry xmlns="' + ATOM_NS + '">'
           + '<author>'
               + '<name>Lloyd Watkin</name>'
               + '<email>lloyd@evilprofessor.co.uk</email>'
@@ -118,7 +118,7 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds contributor details', function() {
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_ATOM + '">'
+            '<item><entry xmlns="' + ATOM_NS + '">'
           + '<contributor>'
               + '<name>Lloyd Watkin</name>'
               + '<email>lloyd@evilprofessor.co.uk</email>'
