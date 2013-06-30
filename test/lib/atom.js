@@ -98,7 +98,7 @@ describe('Parsing posts with \'atom\'', function() {
             '<item><entry xmlns="' + ATOM_NS + '">'
           + '<author>'
               + '<name>Marty McFly</name>'
-              + '<email>marty@mcfly..net</email>'
+              + '<email>marty@mcfly.net</email>'
               + '<uri>http://notchick.en</uri>'
               + '<id>1</id>'
           + '</author>'
@@ -185,6 +185,56 @@ describe('Building stanzas with \'atom\'', function() {
         entry.getChildText('updated').should.equal(entity.atom.updated)
         entry.getChildText('summary').should.equal(entity.atom.summary)
         entry.getChildText('published').should.equal(entity.atom.published)
+    })
+
+    it('Can add a single author', function() {
+        var entity = {
+            atom: {
+                author: {
+                    name: 'Doc Brown',
+                    email: 'doc@outtatime.org'
+                }
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var entry = stanza.getChild('entry')
+        entry.getChildren('author').length.should.equal(1)
+        entry.getChild('author').getChildText('name')
+            .should.equal(entity.atom.author.name)
+        entry.getChild('author').getChildText('email')
+            .should.equal(entity.atom.author.email)
+        should.not.exist(entry.getChild('author').getChildText('uri'))
+    })
+
+    it('Can add multiple authors', function() {
+        var entity = {
+            atom: {
+                author: [
+                    { name: 'Doc Brown', email: 'doc@outtatime.org' },
+                    { name: 'Marty McFly', uri: 'http://notachick.en' }
+                ]
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var entry = stanza.getChild('entry')
+        entry.getChildren('author').length.should.equal(2)
+        var authors = entry.getChildren('author')
+        authors[0].getChildText('name')
+            .should.equal(entity.atom.author[0].name)
+        authors[0].getChildText('email')
+            .should.equal(entity.atom.author[0].email)
+        should.not.exist(authors[0].getChildText('uri'))
+        authors[1].getChildText('name')
+            .should.equal(entity.atom.author[1].name)
+        authors[1].getChildText('uri')
+            .should.equal(entity.atom.author[1].uri)
+        should.not.exist(authors[1].getChildText('email'))
+    })
+
+    it('Can add contributors', function() {
+
     })
  
 })
