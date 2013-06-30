@@ -271,4 +271,32 @@ describe('Building stanzas with \'atom\'', function() {
         categories[2].attrs.term.should.equal('three')
     })
 
+    it('Adds links', function() {
+        var entity = {
+            atom: {
+                links: [
+                    { href: 'href-1', rel: 'alternative' },
+                    { hreflang: 'en_GB', type: 'image', length: 64 }
+                ]
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var entry = stanza.getChild('entry')
+        entry.getChildren('link').length.should.equal(2)
+        var links = entry.getChildren('link')
+
+        links[0].attrs.href.should.equal(entity.atom.links[0].href)
+        links[0].attrs.rel.should.equal(entity.atom.links[0].rel)
+        should.not.exist(links[0].attrs.hreflang)
+        should.not.exist(links[0].attrs.type)
+        should.not.exist(links[0].attrs.length)
+       
+        should.not.exist(links[1].attrs.href)
+        should.not.exist(links[1].attrs.rel)
+        links[1].attrs.hreflang.should.equal(entity.atom.links[1].hreflang)
+        links[1].attrs.type.should.equal(entity.atom.links[1].type)
+        links[1].attrs.length.should.equal(entity.atom.links[1].length)
+    })
+
 })
