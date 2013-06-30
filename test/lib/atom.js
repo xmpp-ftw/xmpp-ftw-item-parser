@@ -234,7 +234,23 @@ describe('Building stanzas with \'atom\'', function() {
     })
 
     it('Can add contributors', function() {
-
+        var entity = {
+            atom: {
+                contributors: [
+                    { name: 'Doc Brown', email: 'doc@outtatime.org' },
+                    { name: 'Marty McFly', uri: 'http://notachick.en' }
+                ]
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var entry = stanza.getChild('entry')
+        entry.getChildren('contributor').length.should.equal(2)
+        var contributors = entry.getChildren('contributor')
+        contributors[0].getChildText('name')
+            .should.equal(entity.atom.contributors[0].name)
+        contributors[1].getChildText('name')
+            .should.equal(entity.atom.contributors[1].name)        
     })
  
 })
