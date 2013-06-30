@@ -39,7 +39,7 @@ describe('Parsing posts with \'atom\'', function() {
 
     it('Adds content', function() {
         var entity = {}
-        var content = 'Hello world!'
+        var content = 'Great Scott!'
         var item = ltx.parse(
             '<item><entry xmlns="' + ATOM_NS + '">'
           + '<content>' + content + '</content>'
@@ -51,7 +51,7 @@ describe('Parsing posts with \'atom\'', function() {
 
     it('Adds XHTML content with language', function() {
         var entity = {}
-        var content = '<p>Hello <strong>world!</strong></p>'
+        var content = '<p>Great <strong>Scott!</strong></p>'
         var language = 'en_GB'
         var type = 'xhtml'
         var item = ltx.parse(
@@ -72,9 +72,9 @@ describe('Parsing posts with \'atom\'', function() {
         var item = ltx.parse(
             '<item><entry xmlns="' + ATOM_NS + '">'
           + '<link title="A link" rel="alternative" '
-              + 'href="http://buddycloud.org/blog/post-1" type="text/html" />'
+              + 'href="http://bttf.net/film-1" type="text/html" />'
           + '<link hreflang="en_GB" length="64" '
-              + 'href="http://buddycloud.co.uk/blog/post-1" />'
+              + 'href="http://bttf.net/film-2" />'
           + '</entry></item>'
         )
         parser.parse(item, entity)
@@ -82,11 +82,11 @@ describe('Parsing posts with \'atom\'', function() {
         entity.links[0].should.eql({
             title: 'A link',
             rel: 'alternative',
-            href: 'http://buddycloud.org/blog/post-1',
+            href: 'http://bttf.net/film-1',
             type: 'text/html'
         })
         entity.links[1].should.eql({
-            href: 'http://buddycloud.co.uk/blog/post-1',
+            href: 'http://bttf.net/film-2',
             hreflang: 'en_GB',
             length: '64'
         })
@@ -97,9 +97,9 @@ describe('Parsing posts with \'atom\'', function() {
         var item = ltx.parse(
             '<item><entry xmlns="' + ATOM_NS + '">'
           + '<author>'
-              + '<name>Lloyd Watkin</name>'
-              + '<email>lloyd@evilprofessor.co.uk</email>'
-              + '<uri>http://evilprofessor.co.uk</uri>'
+              + '<name>Marty McFly</name>'
+              + '<email>marty@mcfly..net</email>'
+              + '<uri>http://notchick.en</uri>'
               + '<id>1</id>'
           + '</author>'
           + '</entry></item>'
@@ -107,9 +107,9 @@ describe('Parsing posts with \'atom\'', function() {
         parser.parse(item, entity)
         entity.should.eql({
             author: {
-                name: 'Lloyd Watkin', 
-                email: 'lloyd@evilprofessor.co.uk',
-                uri: 'http://evilprofessor.co.uk',
+                name: 'Marty McFly', 
+                email: 'marty@mcfly.net',
+                uri: 'http://notchick.en',
                 id: '1'
             } 
         })    
@@ -120,11 +120,11 @@ describe('Parsing posts with \'atom\'', function() {
         var item = ltx.parse(
             '<item><entry xmlns="' + ATOM_NS + '">'
           + '<contributor>'
-              + '<name>Lloyd Watkin</name>'
-              + '<email>lloyd@evilprofessor.co.uk</email>'
+              + '<name>Marty McFly</name>'
+              + '<email>marty@mcfly.net</email>'
           + '</contributor>'
           + '<contributor>'
-              + '<name>Steven Watkin</name>'
+              + '<name>Doc Brown</name>'
               + '<id>1</id>'
           + '</contributor>'
           + '</entry></item>'
@@ -132,11 +132,11 @@ describe('Parsing posts with \'atom\'', function() {
         parser.parse(item, entity)
         entity.contributors.length.should.equal(2)
         entity.contributors[0].should.eql({
-            name: 'Lloyd Watkin',
-            email: 'lloyd@evilprofessor.co.uk'
+            name: 'Marty McFly',
+            email: 'marty@mcfly.net'
         })
         entity.contributors[1].should.eql({
-            name: 'Steven Watkin',
+            name: 'Doc Brown',
             id: '1'
         })
     })
