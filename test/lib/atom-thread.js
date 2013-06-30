@@ -1,5 +1,5 @@
 var should = require('should')
-  , parser = require('../../src/atom-thread')
+  , parser = require('../../lib/atom-thread')
   , ltx    = require('ltx')
 
 var NS_THREAD = 'http://purl.org/syndication/thread/1.0'
