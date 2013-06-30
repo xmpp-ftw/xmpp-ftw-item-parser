@@ -42,7 +42,6 @@ describe('Parsing posts with \'thread\'', function() {
 describe('Building stanzas with \'atom\'', function() {
 
     it('Shouldn\'t add elements if no data attribute provided', function() {
-
         var stanza = ltx.parse('<item><entry xmlns="' + NS_ATOM + '"/></item>')
         var original = ltx.parse(stanza.toString())
         var entry = {}

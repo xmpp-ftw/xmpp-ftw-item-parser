@@ -1,5 +1,5 @@
 var atom    = require('./lib/atom')
-  , thread  = require('./lib/thread')
+  , thread  = require('./lib/atom-thread')
   , plain   = require('./lib/plain')
 
 var parsers = [
@@ -21,14 +21,9 @@ exports.parse = function(item) {
    return entity
 }
 
-exports.build = function(data) {
-
-    // Place payload as key 'payload' so we can 
-    // pass by reference not value more easily
-    var p = {}
+exports.build = function(data, stanza) {
 
     parsers.forEach(function(parser) {
-        parser.build(data, p)
+        parser.build(data, stanza)
     })
-    return p.payload
 }
