@@ -32,17 +32,17 @@ describe('Parsing posts with \'plain\'', function() {
 
 describe('Building stanzas with \'plain\'', function() {
 
-    it('shouldn\'t attempt to build element if already built', function() {
+    it('Shouldn\'t attempt to build element if already built', function() {
         var data = 'Marty McFly'
-        var p = { payload: 'Doc Brown' }
+        var p = ltx.parse('<item><body>Doc Brown</body></item>')
         parser.build(data, p)
-        p.payload.should.equal('Doc Brown')
+        p.getChildText('body').should.equal('Doc Brown')
     })
 
     it('should build expected element', function() {
         var data = 'Back to the future'
-        var p = {}
+        var p = ltx.parse('<item/>')
         parser.build(data, p)
-        p.payload.toString().should.equal('<body>' + data + '</body>')
+        p.children.join('').toString().should.equal('<body>' + data + '</body>')
     })
 })
