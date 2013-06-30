@@ -46,7 +46,7 @@ var addContributors = function(entity) {
     contributors.forEach(function(contributor) {
         var c = {}
         authorDetails.forEach(function(attribute) {
-            if (value = author.getChild(attribute))
+            if (value = contributor.getChild(attribute))
                 c[attribute] = value.getText()
         })
         entity.contributors.push(c)

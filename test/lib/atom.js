@@ -116,6 +116,33 @@ describe('Parsing posts with \'atom\'', function() {
             } 
         })    
     })
+
+    it('Adds contributor details', function() {
+        var entity = {}
+        var item = ltx.parse(
+            '<item><entry xmlns="' + NS_ATOM + '">'
+          + '<contributor>'
+              + '<name>Lloyd Watkin</name>'
+              + '<email>lloyd@evilprofessor.co.uk</email>'
+          + '</contributor>'
+          + '<contributor>'
+              + '<name>Steven Watkin</name>'
+              + '<id>1</id>'
+          + '</contributor>'
+          + '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.contributors.length.should.equal(2)
+        entity.contributors[0].should.eql({
+            name: 'Lloyd Watkin',
+            email: 'lloyd@evilprofessor.co.uk'
+        })
+        entity.contributors[1].should.eql({
+            name: 'Steven Watkin',
+            id: '1'
+        })
+    })
+
 })
 
 describe('Building stanzas with \'atom\'', function() {})
