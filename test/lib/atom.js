@@ -143,4 +143,48 @@ describe('Parsing posts with \'atom\'', function() {
 
 })
 
-describe('Building stanzas with \'atom\'', function() {})
+describe('Building stanzas with \'atom\'', function() {
+
+    it('Doesn\'t touch stanza if no \'atom\' attribute', function() {
+       var stanza = ltx.parse('<item/>')
+       var original = ltx.parse(stanza.toString())
+       var entity = {}
+       parser.build(entity, stanza)
+       stanza.root().toString().should.equal(original.toString())
+    })
+
+    it('Adds atom namespace and <entry> element', function() {
+       var stanza = ltx.parse('<item/>')
+       var entity = { atom: {} }
+       parser.build(entity, stanza)
+       stanza.getChild('entry', ATOM_NS).should.exist
+    })
+
+    it('Adds atom namespace with existing <entry> element', function() {
+        var stanza = ltx.parse('<item><entry/></item>')
+        var entity = { atom: {} }
+        parser.build(entity, stanza)
+        stanza.getChild('entry', ATOM_NS).should.exist
+    })
+
+    it('Adds simple elements', function() {
+        var entity = {
+            atom: {
+                id: 'id-value',
+                title: 'title-value',
+                updated: 'updated-value',
+                summary: 'summary-value',
+                published: 'published-value'
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var entry = stanza.getChild('entry')
+        entry.getChildText('id').should.equal(entity.atom.id)
+        entry.getChildText('title').should.equal(entity.atom.title)
+        entry.getChildText('updated').should.equal(entity.atom.updated)
+        entry.getChildText('summary').should.equal(entity.atom.summary)
+        entry.getChildText('published').should.equal(entity.atom.published)
+    })
+ 
+})
