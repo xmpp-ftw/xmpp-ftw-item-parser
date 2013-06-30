@@ -38,6 +38,37 @@ describe('Parsing posts with \'atom\'', function() {
         parser.parse(item, entity)
         entity.should.eql(topLevelElements)
     })
+
+    it('Adds content', function() {
+        var entity = {}
+        var content = 'Hello world!'
+        var item = ltx.parse(
+            '<item><entry xmlns="' + NS_ATOM + '">'
+          + '<content>' + content + '</content>'
+          + '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({ content: { type: 'text', content: content } })
+    })   
+
+    it('Adds XHTML content with language', function() {
+        var entity = {}
+        var content = '<p>Hello <strong>world!</strong></p>'
+        var language = 'en_GB'
+        var type = 'xhtml'
+        var item = ltx.parse(
+            '<item><entry xmlns="' + NS_ATOM + '">'
+          + '<content xml:lang="' + language + '" type="' + type + '">' 
+          + content
+          + '</content>'
+          + '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            content: { type: 'xhtml', lang: 'en_GB', content: content } 
+        })
+    })
+
 })
 
 describe('Building stanzas with \'atom\'', function() {})
