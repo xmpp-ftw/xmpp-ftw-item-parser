@@ -25,13 +25,13 @@ describe('Parsing posts with \'atom\'', function() {
 
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + ATOM_NS + '">'
-          + '<id>' + topLevelElements.id + '</id>'
-          + '<updated>' + topLevelElements.updated + '</updated>'
-          + '<published>' + topLevelElements.published + '</published>'
-          + '<summary>' + topLevelElements.summary + '</summary>'
-          + '<title>' + topLevelElements.title + '</title>'
-          + '</entry></item>'
+          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<id>' + topLevelElements.id + '</id>' +
+          '<updated>' + topLevelElements.updated + '</updated>' +
+          '<published>' + topLevelElements.published + '</published>' +
+          '<summary>' + topLevelElements.summary + '</summary>' +
+          '<title>' + topLevelElements.title + '</title>' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.should.eql(topLevelElements)
@@ -41,13 +41,13 @@ describe('Parsing posts with \'atom\'', function() {
         var entity = {}
         var content = 'Great Scott!'
         var item = ltx.parse(
-            '<item><entry xmlns="' + ATOM_NS + '">'
-          + '<content>' + content + '</content>'
-          + '</entry></item>'
+          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<content>' + content + '</content>' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.should.eql({ content: { type: 'text', content: content } })
-    })   
+    })
 
     it('Adds XHTML content with language', function() {
         var entity = {}
@@ -55,27 +55,27 @@ describe('Parsing posts with \'atom\'', function() {
         var language = 'en_GB'
         var type = 'xhtml'
         var item = ltx.parse(
-            '<item><entry xmlns="' + ATOM_NS + '">'
-          + '<content xml:lang="' + language + '" type="' + type + '">' 
-          + content
-          + '</content>'
-          + '</entry></item>'
+          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<content xml:lang="' + language + '" type="' + type + '">' +
+          content +
+          '</content>' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.should.eql({
-            content: { type: 'xhtml', lang: 'en_GB', content: content } 
+            content: { type: 'xhtml', lang: 'en_GB', content: content }
         })
     })
 
     it('Adds links to the entry', function() {
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + ATOM_NS + '">'
-          + '<link title="A link" rel="alternative" '
-              + 'href="http://bttf.net/film-1" type="text/html" />'
-          + '<link hreflang="en_GB" length="64" '
-              + 'href="http://bttf.net/film-2" />'
-          + '</entry></item>'
+          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<link title="A link" rel="alternative" ' +
+              'href="http://bttf.net/film-1" type="text/html" />' +
+          '<link hreflang="en_GB" length="64" ' +
+              'href="http://bttf.net/film-2" />' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.links.length.should.equal(2)
@@ -95,39 +95,39 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds author details', function() {
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + ATOM_NS + '">'
-          + '<author>'
-              + '<name>Marty McFly</name>'
-              + '<email>marty@mcfly.net</email>'
-              + '<uri>http://notchick.en</uri>'
-              + '<id>1</id>'
-          + '</author>'
-          + '</entry></item>'
+          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<author>' +
+              '<name>Marty McFly</name>' +
+              '<email>marty@mcfly.net</email>' +
+              '<uri>http://notchick.en</uri>' +
+              '<id>1</id>' +
+          '</author>' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.should.eql({
             author: {
-                name: 'Marty McFly', 
+                name: 'Marty McFly',
                 email: 'marty@mcfly.net',
                 uri: 'http://notchick.en',
                 id: '1'
-            } 
-        })    
+            }
+        })
     })
 
     it('Adds contributor details', function() {
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + ATOM_NS + '">'
-          + '<contributor>'
-              + '<name>Marty McFly</name>'
-              + '<email>marty@mcfly.net</email>'
-          + '</contributor>'
-          + '<contributor>'
-              + '<name>Doc Brown</name>'
-              + '<id>1</id>'
-          + '</contributor>'
-          + '</entry></item>'
+          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<contributor>' +
+              '<name>Marty McFly</name>' +
+              '<email>marty@mcfly.net</email>' +
+          '</contributor>' +
+          '<contributor>' +
+              '<name>Doc Brown</name>' +
+              '<id>1</id>' +
+          '</contributor>' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.contributors.length.should.equal(2)
@@ -252,7 +252,7 @@ describe('Building stanzas with \'atom\'', function() {
         contributors[0].getChildText('name')
             .should.equal(entity.atom.contributors[0].name)
         contributors[1].getChildText('name')
-            .should.equal(entity.atom.contributors[1].name)        
+            .should.equal(entity.atom.contributors[1].name)
     })
 
     it('Can add categories', function() {

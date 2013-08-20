@@ -1,13 +1,10 @@
-var should = require('should')
-  , parser = require('../../lib/atom-thread')
+var parser = require('../../lib/atom-thread')
   , ltx    = require('ltx')
 
 var NS_THREAD = 'http://purl.org/syndication/thread/1.0'
 var NS_ATOM = "http://www.w3.org/2005/Atom"
 
 describe('Parsing posts with \'thread\'', function() {
-
-    var attributes = ['ref', 'type', 'href']
 
     it('Shouldn\'t act if no thread namespace', function() {
         var entity = { not: 'empty' }
@@ -20,12 +17,12 @@ describe('Parsing posts with \'thread\'', function() {
 
         var entity = {}
         var item = ltx.parse(
-            '<item><entry xmlns="' + NS_THREAD + '">'
-          + '<thr:in-reply-to '
-                + 'ref="tag:xmpp-ftw,2013:10" '
-                + 'type="application/xhtml+xml" '
-                + 'href="http://evilprofessor.co.uk/entries/1"/>'
-          + '</entry></item>'
+          '<item><entry xmlns="' + NS_THREAD + '">' +
+          '<thr:in-reply-to ' +
+                'ref="tag:xmpp-ftw,2013:10" ' +
+                'type="application/xhtml+xml" ' +
+                'href="http://evilprofessor.co.uk/entries/1"/>' +
+          '</entry></item>'
         )
         parser.parse(item, entity)
         entity.should.eql({
