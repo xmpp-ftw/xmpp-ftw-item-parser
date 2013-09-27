@@ -35,7 +35,7 @@ exports.parse = function(item) {
        try {
            parser.parse(item, entity)
        } catch (e) {
-           getLogger().error(e)
+           getLogger().error(e.message)
        }
    })
    
