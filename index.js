@@ -8,13 +8,34 @@ var parsers = [
     plain
 ]
 
+var logger
+
+exports.setLogger = function(log) {
+    logger = log
+}
+
+var getLogger = function() {
+    if (!logger) 
+        logger = {
+            log: function() {},
+            info: function() {},
+            warn: function() {},
+            error: function() {}
+        }
+    return logger
+}
+
+parsers.forEach(function(parser) {
+    parser.setLogger(getLogger())
+})
+
 exports.parse = function(item) {
    var entity = {}
    parsers.forEach(function(parser) {
        try {
            parser.parse(item, entity)
        } catch (e) {
-           console.error(e)
+           getLogger().error(e)
        }
    })
    

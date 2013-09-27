@@ -4,6 +4,13 @@ var parser = require('../../lib/atom-thread')
 var NS_THREAD = 'http://purl.org/syndication/thread/1.0'
 var NS_ATOM = "http://www.w3.org/2005/Atom"
 
+parser.setLogger({
+    log: function() {},
+    info: function() {},
+    warn: function() {},
+    error: function() {}
+})
+                 
 describe('Parsing posts with \'thread\'', function() {
 
     it('Shouldn\'t act if no thread namespace', function() {

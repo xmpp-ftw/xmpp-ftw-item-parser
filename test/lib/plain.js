@@ -2,6 +2,13 @@ var should = require('should')
   , parser = require('../../lib/plain')
   , ltx    = require('ltx')
 
+parser.setLogger({
+    log: function() {},
+    info: function() {},
+    warn: function() {},
+    error: function() {}
+})
+
 describe('Parsing posts with \'plain\'', function() {
 
     var item = ltx.parse('<item><body>This is <i>some</i> text</body></item>')
