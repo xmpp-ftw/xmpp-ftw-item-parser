@@ -1,6 +1,6 @@
 {
   "name": "xmpp-ftw-item-parser",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Used to parse \"standard\" XMPP pubsub payloads both from XML→JSON, and build stanzas JSON→XML",
   "main": "index.js",
   "scripts": {
