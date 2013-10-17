@@ -1,8 +1,10 @@
 var atom    = require('./lib/atom')
   , thread  = require('./lib/atom-thread')
   , plain   = require('./lib/plain')
+  , json    = require('./lib/json')
 
 var parsers = [
+    json,
     atom,
     thread,
     plain
