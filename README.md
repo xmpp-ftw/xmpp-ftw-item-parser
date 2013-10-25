@@ -9,7 +9,7 @@ from JSON objects.
 
 # Build status
 
-[![Build Status](https://secure.travis-ci.org/lloydwatkin/xmpp-ftw-item-parser.png)](http://travis-ci.org/lloydwatkin/xmpp-ftw-item-parser)
+[![Build Status](https://secure.travis-ci.org/xmpp-ftw/xmpp-ftw-item-parser.png)](http://travis-ci.org/xmpp-ftw/xmpp-ftw-item-parser)
 
 # Install
 

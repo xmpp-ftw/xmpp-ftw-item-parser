@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/lloydwatkin/xmpp-ftw-item-parser.git"
+    "url": "git://github.com/xmpp-ftw/xmpp-ftw-item-parser.git"
   },
   "keywords": [
     "xmpp",
@@ -30,7 +30,7 @@
   "readmeFilename": "README.md",
   "gitHead": "b710932e510f5c6e60d949611346c38e3d1489e4",
   "bugs": {
-    "url": "https://github.com/lloydwatkin/xmpp-ftw-item-parser/issues"
+    "url": "https://github.com/xmpp-ftw/xmpp-ftw-item-parser/issues"
   },
   "devDependencies": {
     "mocha": "~1.9.0",
