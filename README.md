@@ -23,3 +23,7 @@ npm i --save xmpp-ftw-item-parser
 # Notes
 
 * The atom builder does not currently build the 'rights' element. If you require this please raise an issue or, better still, send me a pull request
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/xmpp-ftw/xmpp-ftw-item-parser/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
