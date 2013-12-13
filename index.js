@@ -1,3 +1,5 @@
+'use strict';
+
 var atom    = require('./lib/atom')
   , thread  = require('./lib/atom-thread')
   , plain   = require('./lib/plain')
@@ -17,7 +19,7 @@ exports.setLogger = function(log) {
 }
 
 var getLogger = function() {
-    if (!logger) 
+    if (!logger)
         logger = {
             log: function() {},
             info: function() {},
@@ -32,16 +34,15 @@ parsers.forEach(function(parser) {
 })
 
 exports.parse = function(item) {
-   var entity = {}
-   parsers.forEach(function(parser) {
-       try {
-           parser.parse(item, entity)
-       } catch (e) {
-           getLogger().error(e.message)
-       }
-   })
-   
-   return entity
+    var entity = {}
+    parsers.forEach(function(parser) {
+        try {
+            parser.parse(item, entity)
+        } catch (e) {
+            getLogger().error(e.message)
+        }
+    })
+    return entity
 }
 
 exports.build = function(data, stanza) {
