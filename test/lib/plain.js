@@ -1,3 +1,5 @@
+'use strict';
+
 var should = require('should')
   , parser = require('../../lib/plain')
   , ltx    = require('ltx')

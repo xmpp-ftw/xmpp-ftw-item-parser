@@ -1,5 +1,6 @@
-var should = require('should')
-  , parser = require('../../lib/tune')
+'use strict';
+
+var parser = require('../../lib/tune')
   , ltx    = require('ltx')
 
 parser.setLogger({
@@ -9,6 +10,7 @@ parser.setLogger({
     error: function() {}
 })
 
+/* jshint -W030 */
 describe('Parsing \'tune\' stanzas', function() {
 
     var item = ltx.parse('<item>' +
@@ -30,7 +32,11 @@ describe('Parsing \'tune\' stanzas', function() {
         parser.parse(item, entity)
         entity.should.eql({ not: 'empty' })
     })
-    
+
+    it('Tune test', function() {
+        item.should.exist
+    })
+
 })
 
 describe('Building stanzas with \'tune\'', function() {

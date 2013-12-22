@@ -1,3 +1,5 @@
+'use strict';
+
 var parser = require('../index')
   , ltx    = require('ltx')
 

@@ -1,8 +1,10 @@
+'use strict';
+
 var should = require('should')
   , parser = require('../../lib/atom')
   , ltx    = require('ltx')
 
-var ATOM_NS = "http://www.w3.org/2005/Atom"
+var ATOM_NS = 'http://www.w3.org/2005/Atom'
 
 parser.setLogger({
     log: function() {},
@@ -150,21 +152,22 @@ describe('Parsing posts with \'atom\'', function() {
 
 })
 
+/* jshint -W030 */
 describe('Building stanzas with \'atom\'', function() {
 
     it('Doesn\'t touch stanza if no \'atom\' attribute', function() {
-       var stanza = ltx.parse('<item/>')
-       var original = ltx.parse(stanza.toString())
-       var entity = {}
-       parser.build(entity, stanza)
-       stanza.root().toString().should.equal(original.toString())
+        var stanza = ltx.parse('<item/>')
+        var original = ltx.parse(stanza.toString())
+        var entity = {}
+        parser.build(entity, stanza)
+        stanza.root().toString().should.equal(original.toString())
     })
 
     it('Adds atom namespace and <entry> element', function() {
-       var stanza = ltx.parse('<item/>')
-       var entity = { atom: {} }
-       parser.build(entity, stanza)
-       stanza.getChild('entry', ATOM_NS).should.exist
+        var stanza = ltx.parse('<item/>')
+        var entity = { atom: {} }
+        parser.build(entity, stanza)
+        stanza.getChild('entry', ATOM_NS).should.exist
     })
 
     it('Adds atom namespace with existing <entry> element', function() {
@@ -298,7 +301,7 @@ describe('Building stanzas with \'atom\'', function() {
         should.not.exist(links[0].attrs.hreflang)
         should.not.exist(links[0].attrs.type)
         should.not.exist(links[0].attrs.length)
-       
+
         should.not.exist(links[1].attrs.href)
         should.not.exist(links[1].attrs.rel)
         links[1].attrs.hreflang.should.equal(entity.atom.links[1].hreflang)
