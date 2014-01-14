@@ -34,9 +34,29 @@ describe('Parsing posts with \'thread\'', function() {
         parser.parse(item, entity)
         entity.should.eql({
             'in-reply-to': {
-                'ref': 'tag:xmpp-ftw,2013:10',
-                'type': 'application/xhtml+xml',
-                'href': 'http://evilprofessor.co.uk/entries/1'
+                ref: 'tag:xmpp-ftw,2013:10',
+                type: 'application/xhtml+xml',
+                href: 'http://evilprofessor.co.uk/entries/1'
+            }
+        })
+    })
+    
+    it('Adds target details', function() {
+        
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<activity:target>' +
+              '<id>tag:xmpp-ftw.jit.su,news,item-20130113</id>' +
+              '<activity:object-type>comment</activity:object-type>' +
+          '</activity:target>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            target: {
+                id: 'tag:xmpp-ftw.jit.su,news,item-20130113',
+                objectType: 'comment'
             }
         })
     })
