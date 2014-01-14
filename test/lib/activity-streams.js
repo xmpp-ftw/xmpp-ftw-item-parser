@@ -61,6 +61,21 @@ describe('Parsing posts with \'activity streams\'', function() {
             }
         })
     })
+    
+    it('Adds rating details', function() {
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_REVIEW + '">' +
+              '<review:rating>5.0</review:rating>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            review: {
+                rating: 5
+            }
+        })
+    })
 
 })
 
