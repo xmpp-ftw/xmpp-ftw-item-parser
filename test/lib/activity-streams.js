@@ -100,7 +100,7 @@ describe('Building stanzas with \'activity streams\'', function() {
         var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
         var entry = { 'in-reply-to': {} }
         parser.build(entry, stanza)
-        stanza.root().getChild('entry').attrs['xmlns:thr']
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_THREAD]
             .should.equal(parser.NS_THREAD)
     })
 
@@ -112,7 +112,7 @@ describe('Building stanzas with \'activity streams\'', function() {
             href: 'http://evilprofessor.co.uk/entires/1'
         } }
         parser.build(entry, stanza)
-        stanza.root().getChild('entry').attrs['xmlns:thr']
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_THREAD]
             .should.equal(parser.NS_THREAD)
         var inReplyTo = stanza.root().getChild('entry').getChild('in-reply-to')
         inReplyTo.should.exist
@@ -130,12 +130,27 @@ describe('Building stanzas with \'activity streams\'', function() {
             }
         }
         parser.build(entry, stanza)
-        stanza.root().getChild('entry').attrs['xmlns:activity']
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_ACTIVITY]
             .should.equal(parser.NS_ACTIVITY)
         var target = stanza.root().getChild('entry').getChild('target')
         target.should.exist
         target.getChildText('id').should.equal(entry.target.id)
         target.getChildText('object-type').should.equal(entry.target['object-type'])
+    })
+    
+    it('Adds <rating/> element and namespace', function() {
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
+        var entry = {
+            review: {
+                rating: 5
+            }
+        }
+        parser.build(entry, stanza)
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_REVIEW]
+            .should.equal(parser.NS_REVIEW)
+        var rating = stanza.root().getChild('entry').getChild('rating')
+        rating.should.exist
+        rating.getText().should.equal(entry.review.rating.toString())
     })
 
 })
