@@ -3,8 +3,6 @@
 var parser = require('../../lib/atom-thread')
   , ltx    = require('ltx')
 
-var NS_THREAD = 'http://purl.org/syndication/thread/1.0'
-var NS_ATOM = 'http://www.w3.org/2005/Atom'
 
 parser.setLogger({
     log: function() {},
@@ -26,7 +24,7 @@ describe('Parsing posts with \'thread\'', function() {
 
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + NS_THREAD + '">' +
+          '<item><entry xmlns="' + parser.NS_THREAD + '">' +
           '<thr:in-reply-to ' +
                 'ref="tag:xmpp-ftw,2013:10" ' +
                 'type="application/xhtml+xml" ' +
@@ -48,7 +46,7 @@ describe('Parsing posts with \'thread\'', function() {
 describe('Building stanzas with \'atom\'', function() {
 
     it('Shouldn\'t add elements if no data attribute provided', function() {
-        var stanza = ltx.parse('<item><entry xmlns="' + NS_ATOM + '"/></item>')
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
         var original = ltx.parse(stanza.toString())
         var entry = {}
         parser.build(entry, stanza)
@@ -63,15 +61,15 @@ describe('Building stanzas with \'atom\'', function() {
     })
 
     it('Should add namespace to parent element', function() {
-        var stanza = ltx.parse('<item><entry xmlns="' + NS_ATOM + '"/></item>')
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
         var entry = { 'in-reply-to': {} }
         parser.build(entry, stanza)
         stanza.root().getChild('entry').attrs['xmlns:thr']
-            .should.equal(NS_THREAD)
+            .should.equal(parser.NS_THREAD)
     })
 
     it('Adds exected <in-reply-to/> element', function() {
-        var stanza = ltx.parse('<item><entry xmlns="' + NS_ATOM + '"/></item>')
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
         var entry = { 'in-reply-to': {
             ref: 'tag:xmpp-ftw,2013:10',
             type: 'application/xhtml+xml',
@@ -79,7 +77,7 @@ describe('Building stanzas with \'atom\'', function() {
         } }
         parser.build(entry, stanza)
         stanza.root().getChild('entry').attrs['xmlns:thr']
-            .should.equal(NS_THREAD)
+            .should.equal(parser.NS_THREAD)
     })
 
 })

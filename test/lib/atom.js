@@ -4,8 +4,6 @@ var should = require('should')
   , parser = require('../../lib/atom')
   , ltx    = require('ltx')
 
-var ATOM_NS = 'http://www.w3.org/2005/Atom'
-
 parser.setLogger({
     log: function() {},
     info: function() {},
@@ -34,7 +32,7 @@ describe('Parsing posts with \'atom\'', function() {
 
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
           '<id>' + topLevelElements.id + '</id>' +
           '<updated>' + topLevelElements.updated + '</updated>' +
           '<published>' + topLevelElements.published + '</published>' +
@@ -50,7 +48,7 @@ describe('Parsing posts with \'atom\'', function() {
         var entity = {}
         var content = 'Great Scott!'
         var item = ltx.parse(
-          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
           '<content>' + content + '</content>' +
           '</entry></item>'
         )
@@ -64,7 +62,7 @@ describe('Parsing posts with \'atom\'', function() {
         var language = 'en_GB'
         var type = 'xhtml'
         var item = ltx.parse(
-          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
           '<content xml:lang="' + language + '" type="' + type + '">' +
           content +
           '</content>' +
@@ -79,7 +77,7 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds links to the entry', function() {
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
           '<link title="A link" rel="alternative" ' +
               'href="http://bttf.net/film-1" type="text/html" />' +
           '<link hreflang="en_GB" length="64" ' +
@@ -104,7 +102,7 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds author details', function() {
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
           '<author>' +
               '<name>Marty McFly</name>' +
               '<email>marty@mcfly.net</email>' +
@@ -127,7 +125,7 @@ describe('Parsing posts with \'atom\'', function() {
     it('Adds contributor details', function() {
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + ATOM_NS + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
           '<contributor>' +
               '<name>Marty McFly</name>' +
               '<email>marty@mcfly.net</email>' +
@@ -167,14 +165,14 @@ describe('Building stanzas with \'atom\'', function() {
         var stanza = ltx.parse('<item/>')
         var entity = { atom: {} }
         parser.build(entity, stanza)
-        stanza.getChild('entry', ATOM_NS).should.exist
+        stanza.getChild('entry', parser.NS_ATOM).should.exist
     })
 
     it('Adds atom namespace with existing <entry> element', function() {
         var stanza = ltx.parse('<item><entry/></item>')
         var entity = { atom: {} }
         parser.build(entity, stanza)
-        stanza.getChild('entry', ATOM_NS).should.exist
+        stanza.getChild('entry', parser.NS_ATOM).should.exist
     })
 
     it('Adds simple elements', function() {
