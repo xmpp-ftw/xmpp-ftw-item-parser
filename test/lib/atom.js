@@ -33,15 +33,15 @@ describe('Parsing posts with \'atom\'', function() {
         var entity = {}
         var item = ltx.parse(
           '<item><entry xmlns="' + parser.NS_ATOM + '">' +
-          '<id>' + topLevelElements.id + '</id>' +
-          '<updated>' + topLevelElements.updated + '</updated>' +
-          '<published>' + topLevelElements.published + '</published>' +
-          '<summary>' + topLevelElements.summary + '</summary>' +
-          '<title>' + topLevelElements.title + '</title>' +
+              '<id>' + topLevelElements.id + '</id>' +
+              '<updated>' + topLevelElements.updated + '</updated>' +
+              '<published>' + topLevelElements.published + '</published>' +
+              '<summary>' + topLevelElements.summary + '</summary>' +
+              '<title>' + topLevelElements.title + '</title>' +
           '</entry></item>'
         )
         parser.parse(item, entity)
-        entity.should.eql(topLevelElements)
+        entity.atom.should.eql(topLevelElements)
     })
 
     it('Adds content', function() {
@@ -49,11 +49,11 @@ describe('Parsing posts with \'atom\'', function() {
         var content = 'Great Scott!'
         var item = ltx.parse(
           '<item><entry xmlns="' + parser.NS_ATOM + '">' +
-          '<content>' + content + '</content>' +
+          '<content type="text">' + content + '</content>' +
           '</entry></item>'
         )
         parser.parse(item, entity)
-        entity.should.eql({ content: { type: 'text', content: content } })
+        entity.atom.should.eql({ content: { type: 'text', content: content } })
     })
 
     it('Adds XHTML content with language', function() {
@@ -69,11 +69,28 @@ describe('Parsing posts with \'atom\'', function() {
           '</entry></item>'
         )
         parser.parse(item, entity)
-        entity.should.eql({
+        entity.atom.should.eql({
             content: { type: 'xhtml', lang: 'en_GB', content: content }
         })
     })
 
+    it('Adds XHTML content with base', function() {
+        var entity = {}
+        var content = '<p>Great <strong>Scott!</strong></p>'
+        var base = 'http://doc.brown.org'
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<content xml:base="' + base + '">' +
+          content +
+          '</content>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.atom.should.eql({
+            content: { base: base, content: content }
+        })
+    })
+    
     it('Adds links to the entry', function() {
         var entity = {}
         var item = ltx.parse(
@@ -85,14 +102,14 @@ describe('Parsing posts with \'atom\'', function() {
           '</entry></item>'
         )
         parser.parse(item, entity)
-        entity.links.length.should.equal(2)
-        entity.links[0].should.eql({
+        entity.atom.links.length.should.equal(2)
+        entity.atom.links[0].should.eql({
             title: 'A link',
             rel: 'alternative',
             href: 'http://bttf.net/film-1',
             type: 'text/html'
         })
-        entity.links[1].should.eql({
+        entity.atom.links[1].should.eql({
             href: 'http://bttf.net/film-2',
             hreflang: 'en_GB',
             length: '64'
@@ -112,7 +129,7 @@ describe('Parsing posts with \'atom\'', function() {
           '</entry></item>'
         )
         parser.parse(item, entity)
-        entity.should.eql({
+        entity.atom.should.eql({
             author: {
                 name: 'Marty McFly',
                 email: 'marty@mcfly.net',
@@ -137,12 +154,12 @@ describe('Parsing posts with \'atom\'', function() {
           '</entry></item>'
         )
         parser.parse(item, entity)
-        entity.contributors.length.should.equal(2)
-        entity.contributors[0].should.eql({
+        entity.atom.contributors.length.should.equal(2)
+        entity.atom.contributors[0].should.eql({
             name: 'Marty McFly',
             email: 'marty@mcfly.net'
         })
-        entity.contributors[1].should.eql({
+        entity.atom.contributors[1].should.eql({
             name: 'Doc Brown',
             id: '1'
         })
