@@ -1,14 +1,14 @@
 'use strict';
 
-var atom    = require('./lib/atom')
-  , thread  = require('./lib/atom-thread')
-  , plain   = require('./lib/plain')
-  , json    = require('./lib/json')
+var atom            = require('./lib/atom')
+  , activityStreams = require('./lib/activity-streams')
+  , plain           = require('./lib/plain')
+  , json            = require('./lib/json')
 
 var parsers = [
     json,
     atom,
-    thread,
+    activityStreams,
     plain
 ]
 

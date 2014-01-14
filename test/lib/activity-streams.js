@@ -1,6 +1,6 @@
 'use strict';
 
-var parser = require('../../lib/atom-thread')
+var parser = require('../../lib/activity-streams')
   , ltx    = require('ltx')
 
 
