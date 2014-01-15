@@ -27,9 +27,11 @@ describe('Building ATOM feed with thread', function() {
             'in-reply-to': {
                 ref: 'item-12345-parent'
             },
-            target: {
-                id: '12345',
-                'object-type': 'comment'
+            activity: {
+                target: {
+                    id: '12345',
+                    'object-type': 'comment'
+                }
             },
             review: {
                 rating: '5.0'
@@ -77,9 +79,11 @@ describe('Parsing ATOM feed with activity streams', function() {
                     name: 'Doc Brown'
                 }
             },
-            target: {
-                id: '12345',
-                'object-type': 'comment'
+            activity: {
+                target: {
+                    id: '12345',
+                    'object-type': 'comment'
+                }
             },
             'in-reply-to': {
                 ref: 'item-12345-parent'

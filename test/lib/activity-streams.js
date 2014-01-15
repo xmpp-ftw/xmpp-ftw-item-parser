@@ -55,9 +55,11 @@ describe('Parsing posts with \'activity streams\'', function() {
         )
         parser.parse(item, entity)
         entity.should.eql({
-            target: {
-                id: 'tag:xmpp-ftw.jit.su,news,item-20130113',
-                'object-type': 'comment'
+            activity: {
+                target: {
+                    id: 'tag:xmpp-ftw.jit.su,news,item-20130113',
+                    'object-type': 'comment'
+                }
             }
         })
     })
@@ -124,9 +126,11 @@ describe('Building stanzas with \'activity streams\'', function() {
     it('Adds <target/> element and namespace', function() {
         var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
         var entry = {
-            target: {
-                id: 'tag:xmpp-ftw.jit.su,news,item-20130113',
-                'object-type': 'comment'
+            activity: {
+                target: {
+                    id: 'tag:xmpp-ftw.jit.su,news,item-20130113',
+                    'object-type': 'comment'
+                }
             }
         }
         parser.build(entry, stanza)
@@ -134,8 +138,8 @@ describe('Building stanzas with \'activity streams\'', function() {
             .should.equal(parser.NS_ACTIVITY)
         var target = stanza.root().getChild('entry').getChild('target')
         target.should.exist
-        target.getChildText('id').should.equal(entry.target.id)
-        target.getChildText('object-type').should.equal(entry.target['object-type'])
+        target.getChildText('id').should.equal(entry.activity.target.id)
+        target.getChildText('object-type').should.equal(entry.activity.target['object-type'])
     })
     
     it('Adds <rating/> element and namespace', function() {
