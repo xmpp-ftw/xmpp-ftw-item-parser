@@ -111,7 +111,6 @@ describe('Parsing ATOM feed with activity streams', function() {
                 '<' + activityStreams.PREFIX_NS_REVIEW + ':rating>5.0' +
                     '</' + activityStreams.PREFIX_NS_REVIEW + ':rating>' +
             '</entry></item>'
-        console.log(parser.parse(ltx.parse(stanza)))
         parser.parse(ltx.parse(stanza)).should.eql(expected)
     })
     
