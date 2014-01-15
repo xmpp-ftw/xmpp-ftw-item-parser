@@ -32,7 +32,10 @@ describe('Building ATOM feed with thread', function() {
                     id: '12345',
                     'object-type': 'comment'
                 },
-                verb: 'rated'
+                verb: 'rated',
+                object: {
+                    'object-type': 'comment'
+                }
             },
             review: {
                 rating: '5.0'
@@ -57,6 +60,10 @@ describe('Building ATOM feed with thread', function() {
                 '</' + activityStreams.PREFIX_NS_ACTIVITY + ':target>' +
                 '<' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>rated' +
                     '</' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>' +
+                '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object>' +
+                    '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>comment' +
+                        '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                '</activity:object>' +
                 '<' + activityStreams.PREFIX_NS_REVIEW + ':rating>5.0' +
                     '</' + activityStreams.PREFIX_NS_REVIEW + ':rating>' +
             '</entry></item>'
@@ -87,7 +94,10 @@ describe('Parsing ATOM feed with activity streams', function() {
                     id: '12345',
                     'object-type': 'comment'
                 },
-                verb: 'rated'
+                verb: 'rated',
+                object: {
+                    'object-type': 'comment'
+                }
             },
             'in-reply-to': {
                 ref: 'item-12345-parent'
@@ -114,6 +124,10 @@ describe('Parsing ATOM feed with activity streams', function() {
                 '</' + activityStreams.PREFIX_NS_ACTIVITY + ':target>' +
                 '<' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>rated' +
                     '</' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>' +
+                '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object>' +
+                    '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>comment' +
+                        '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                '</activity:object>' +
                 '<' + activityStreams.PREFIX_NS_REVIEW + ':rating>5.0' +
                     '</' + activityStreams.PREFIX_NS_REVIEW + ':rating>' +
             '</entry></item>'

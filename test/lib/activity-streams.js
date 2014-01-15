@@ -80,7 +80,6 @@ describe('Parsing posts with \'activity streams\'', function() {
     })
 
     it('Adds verb details', function() {
-        
         var entity = {}
         var item = ltx.parse(
           '<item><entry xmlns="' + parser.NS_ATOM + '">' +
@@ -91,6 +90,24 @@ describe('Parsing posts with \'activity streams\'', function() {
         entity.should.eql({
             activity: {
                 verb: 'post'
+            }
+        })
+    })
+    
+    it('Adds object details', function() {
+        
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<activity:object><activity:object-type>post</activity:object-type></activity:object>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            activity: {
+                object: {
+                    'object-type': 'post'
+                }
             }
         })
     })
@@ -183,6 +200,22 @@ describe('Building stanzas with \'activity streams\'', function() {
         stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_ACTIVITY]
             .should.equal(parser.NS_ACTIVITY)
         stanza.root().getChild('entry').getChildText('verb').should.equal(entry.activity.verb)
+    })
+    
+    it('Adds <object/> element and namespace', function() {
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
+        var entry = {
+            activity: {
+                object: {
+                    'object-type': 'post'
+                }
+            }
+        }
+        parser.build(entry, stanza)
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_ACTIVITY]
+            .should.equal(parser.NS_ACTIVITY)
+        stanza.root().getChild('entry').getChild('object').getChildText('object-type')
+            .should.equal(entry.activity.object['object-type'])
     })
 
 })
