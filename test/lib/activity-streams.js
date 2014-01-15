@@ -79,6 +79,21 @@ describe('Parsing posts with \'activity streams\'', function() {
         })
     })
 
+    it('Adds verb details', function() {
+        
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<activity:verb>post</activity:verb>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            activity: {
+                verb: 'post'
+            }
+        })
+    })
 })
 
 describe('Building stanzas with \'activity streams\'', function() {
@@ -155,6 +170,19 @@ describe('Building stanzas with \'activity streams\'', function() {
         var rating = stanza.root().getChild('entry').getChild('rating')
         rating.should.exist
         rating.getText().should.equal(entry.review.rating.toString())
+    })
+    
+    it('Adds <verb/> element and namespace', function() {
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
+        var entry = {
+            activity: {
+                verb: 'post'
+            }
+        }
+        parser.build(entry, stanza)
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_ACTIVITY]
+            .should.equal(parser.NS_ACTIVITY)
+        stanza.root().getChild('entry').getChildText('verb').should.equal(entry.activity.verb)
     })
 
 })

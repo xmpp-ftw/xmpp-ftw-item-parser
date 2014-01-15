@@ -31,7 +31,8 @@ describe('Building ATOM feed with thread', function() {
                 target: {
                     id: '12345',
                     'object-type': 'comment'
-                }
+                },
+                verb: 'rated'
             },
             review: {
                 rating: '5.0'
@@ -54,6 +55,8 @@ describe('Building ATOM feed with thread', function() {
                     '<id>12345</id>' +
                     '<object-type>comment</object-type>' +
                 '</' + activityStreams.PREFIX_NS_ACTIVITY + ':target>' +
+                '<' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>rated' +
+                    '</' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>' +
                 '<' + activityStreams.PREFIX_NS_REVIEW + ':rating>5.0' +
                     '</' + activityStreams.PREFIX_NS_REVIEW + ':rating>' +
             '</entry></item>'
@@ -83,7 +86,8 @@ describe('Parsing ATOM feed with activity streams', function() {
                 target: {
                     id: '12345',
                     'object-type': 'comment'
-                }
+                },
+                verb: 'rated'
             },
             'in-reply-to': {
                 ref: 'item-12345-parent'
@@ -108,6 +112,8 @@ describe('Parsing ATOM feed with activity streams', function() {
                     '<id>12345</id>' +
                     '<object-type>comment</object-type>' +
                 '</' + activityStreams.PREFIX_NS_ACTIVITY + ':target>' +
+                '<' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>rated' +
+                    '</' + activityStreams.PREFIX_NS_ACTIVITY + ':verb>' +
                 '<' + activityStreams.PREFIX_NS_REVIEW + ':rating>5.0' +
                     '</' + activityStreams.PREFIX_NS_REVIEW + ':rating>' +
             '</entry></item>'
