@@ -35,6 +35,9 @@ describe('Building ATOM feed with thread', function() {
                 verb: 'rated',
                 object: {
                     'object-type': 'comment'
+                },
+                author: {
+                    'object-type': 'person'
                 }
             },
             review: {
@@ -52,7 +55,12 @@ describe('Building ATOM feed with thread', function() {
                 '</content>' +
                 '<title>Back to the future quote of the day</title>' +
                 '<published>2014-01-13T13:19:00.000Z</published>' +
-                '<author><name>Doc Brown</name></author>' +
+                '<author>' +
+                    '<name>Doc Brown</name>' +
+                    '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                        'person' +
+                    '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                '</author>' +
                 '<' + activityStreams.PREFIX_NS_THREAD + ':in-reply-to ref="item-12345-parent"/>' +
                 '<' + activityStreams.PREFIX_NS_ACTIVITY + ':target>' +
                     '<id>12345</id>' +
@@ -97,6 +105,9 @@ describe('Parsing ATOM feed with activity streams', function() {
                 verb: 'rated',
                 object: {
                     'object-type': 'comment'
+                },
+                author: {
+                    'object-type': 'person'
                 }
             },
             'in-reply-to': {
@@ -116,7 +127,12 @@ describe('Parsing ATOM feed with activity streams', function() {
                 '</content>' +
                 '<title>Back to the future quote of the day</title>' +
                 '<published>2014-01-13T13:19:00.000Z</published>' +
-                '<author><name>Doc Brown</name></author>' +
+                '<author>' +
+                    '<name>Doc Brown</name>' +
+                    '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                        'person' +
+                    '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                '</author>' +
                 '<' + activityStreams.PREFIX_NS_THREAD + ':in-reply-to ref="item-12345-parent"/>' +
                 '<' + activityStreams.PREFIX_NS_ACTIVITY + ':target>' +
                     '<id>12345</id>' +

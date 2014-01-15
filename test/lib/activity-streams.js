@@ -2,6 +2,7 @@
 
 var parser = require('../../lib/activity-streams')
   , ltx    = require('ltx')
+  , should = require('should')
 
 
 parser.setLogger({
@@ -46,7 +47,7 @@ describe('Parsing posts with \'activity streams\'', function() {
         
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '" activity:xmlns="' + parser.NS_ACTIVITY + '">' +
           '<activity:target>' +
               '<id>tag:xmpp-ftw.jit.su,news,item-20130113</id>' +
               '<activity:object-type>comment</activity:object-type>' +
@@ -82,7 +83,7 @@ describe('Parsing posts with \'activity streams\'', function() {
     it('Adds verb details', function() {
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '" activity:xmlns="' + parser.NS_ACTIVITY + '">' +
           '<activity:verb>post</activity:verb>' +
           '</entry></item>'
         )
@@ -98,7 +99,7 @@ describe('Parsing posts with \'activity streams\'', function() {
         
         var entity = {}
         var item = ltx.parse(
-          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<item><entry xmlns="' + parser.NS_ATOM + '" activity:xmlns="' + parser.NS_ACTIVITY + '">' +
           '<activity:object><activity:object-type>post</activity:object-type></activity:object>' +
           '</entry></item>'
         )
@@ -111,6 +112,27 @@ describe('Parsing posts with \'activity streams\'', function() {
             }
         })
     })
+    
+    it('Adds author extension details', function() {
+        
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<author>' +
+              '<object-type xmlns="' + parser.NS_ACTIVITY + '">person</object-type>' +
+          '</author>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            activity: {
+                author: {
+                    'object-type': 'person'
+                }
+            }
+        })
+    })
+    
 })
 
 describe('Building stanzas with \'activity streams\'', function() {
@@ -216,6 +238,37 @@ describe('Building stanzas with \'activity streams\'', function() {
             .should.equal(parser.NS_ACTIVITY)
         stanza.root().getChild('entry').getChild('object').getChildText('object-type')
             .should.equal(entry.activity.object['object-type'])
+    })
+    
+    it('Can extend ATOM <author/> with object-type', function() {
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"><author/></entry></item>')
+        var entry = {
+            activity: {
+                author: {
+                    'object-type': 'person'
+                }
+            }
+        }
+        parser.build(entry, stanza)
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_ACTIVITY]
+            .should.equal(parser.NS_ACTIVITY)
+        stanza.root().getChild('entry').getChild('author').getChildText('object-type')
+            .should.equal(entry.activity.author['object-type'])
+    })
+    
+    it('Doesn\'t add author extension if we don\'t have atom:author in place', function() {
+        var stanza = ltx.parse('<item><entry xmlns="' + parser.NS_ATOM + '"/></item>')
+        var entry = {
+            activity: {
+                author: {
+                    'object-type': 'person'
+                }
+            }
+        }
+        parser.build(entry, stanza)
+        stanza.root().getChild('entry').attrs['xmlns:' + parser.PREFIX_NS_ACTIVITY]
+            .should.equal(parser.NS_ACTIVITY)
+        should.not.exist(stanza.root().getChild('entry').getChild('author'))
     })
 
 })
