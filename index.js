@@ -4,8 +4,10 @@ var atom            = require('./lib/atom')
   , activityStreams = require('./lib/activity-streams')
   , plain           = require('./lib/plain')
   , json            = require('./lib/json')
+  , tune            = require('./lib/tune')
 
 var parsers = [
+    tune,
     json,
     atom,
     activityStreams,

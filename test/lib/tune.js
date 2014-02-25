@@ -59,13 +59,6 @@ describe('Parsing \'tune\' stanzas', function() {
 
 describe('Building stanzas with \'tune\'', function() {
 
-    it('Shouldn\'t attempt to build element if already built', function() {
-        var data = 'Marty McFly'
-        var p = ltx.parse('<item><body>Doc Brown</body></item>')
-        parser.build(data, p)
-        p.getChildText('body').should.equal('Doc Brown')
-    })
-
     it('Should build expected element', function() {
         var data = {
             tune: {
