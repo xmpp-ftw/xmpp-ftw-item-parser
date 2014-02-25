@@ -66,9 +66,22 @@ describe('Building stanzas with \'tune\'', function() {
         p.getChildText('body').should.equal('Doc Brown')
     })
 
-    it.skip('should build expected element', function() {
-        console.log('Not completed yet')
-        return false
+    it('Should build expected element', function() {
+        var data = {
+            tune: {
+                artist: 'Huey Lewis and the News',
+                length: 233,
+                rating: 10,
+                source: 'Fore!',
+                title: 'The power of love',
+                track: '8',
+                uri: 'http://en.wikipedia.org/wiki/' +
+                    'The_Power_of_Love_(Huey_Lewis_and_the_News_song)'
+            }
+        }
+        var p = ltx.parse('<item/>')
+        parser.build(data, p)
+        p.root().toString().should.equal(item.root().toString())
     })
 })
 
