@@ -83,6 +83,18 @@ describe('Building stanzas with \'tune\'', function() {
         parser.build(data, p)
         p.root().toString().should.equal(item.root().toString())
     })
+
+    it('Can build empty tune element', function() {
+        var data = {
+            tune: true
+        }
+        var p = ltx.parse('<item/>')
+        parser.build(data, p)
+        var tune = p.root().getChild('tune', parser.NS)
+        tune.should.exist
+        tune.children.length.should.equal(0)
+    })
+
 })
 
 describe('Namespace', function() {
