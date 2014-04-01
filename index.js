@@ -5,13 +5,15 @@ var atom            = require('./lib/atom')
   , plain           = require('./lib/plain')
   , json            = require('./lib/json')
   , tune            = require('./lib/tune')
+  , iodef            = require('./lib/iodef')
 
 var parsers = [
     tune,
     json,
     atom,
     activityStreams,
-    plain
+    plain,
+    iodef
 ]
 
 var logger
