@@ -5,6 +5,7 @@ var parser = require('../index')
 
 var activityStreams = require('../lib/activity-streams')
   , atom = require('../lib/atom')
+  , iodef = require('../lib/iodef')
 
 describe('Building ATOM feed with thread', function() {
 
@@ -81,7 +82,7 @@ describe('Building ATOM feed with thread', function() {
 })
 
 describe('Parsing ATOM feed with activity streams', function() {
-    
+
     it('Should parse a full stanza', function() {
         var expected = {
             atom: {
@@ -149,5 +150,96 @@ describe('Parsing ATOM feed with activity streams', function() {
             '</entry></item>'
         parser.parse(ltx.parse(stanza)).should.eql(expected)
     })
-    
+
+})
+
+describe('IODEF support', function() {
+
+    var iodefJson = {
+        'IODEF-Document': {
+            version: iodef.VERSION_IODEF,
+            lang: 'en',
+            formatid: 'simulation',
+            Incidents: [{
+                purpose: 'ext-value',
+                'ext-purpose': 'new-purpose',
+                lang: 'en',
+                restriction: 'need-to-know',
+                IncidentID: {
+                    IncidentID: '189493',
+                    name: 'cert.example.com',
+                    instance: '5',
+                    restriction: 'private',
+                },
+                ReportTime: {ReportTime:'2014-03-27T12:39:24+00:00'},
+                Assessments: [{
+                    occurrence : 'actual',
+                    restriction : 'private',
+                    Impacts: [{
+                        lang: 'en',
+                        severity: 'medium',
+                        completion: 'succeeded',
+                        type: 'ext-value',
+                        'ext-type': 'new-type',
+                        Impact: 'A new type of attack has taken all of our printers offline.',
+                    }],
+                }],
+                Contacts: [{
+                    role: 'ext-value',
+                    'ext-role': 'new-role',
+                    type: 'ext-value',
+                    'ext-type': 'new-type',
+                    restriction: 'public',
+                    ContactName: {ContactName:'Bill Folds'},
+                    Emails: [{
+                        meaning: 'IRT group address, manned Mon-Fri 9-5 UTC',
+                        Email: 'contact@cert.example.com',
+                    }]
+                }],
+            }],
+        }
+    }
+
+    var iodefXml = '' +
+        '<IODEF-Document'  +
+            ' version="' + iodef.VERSION_IODEF + '"' +
+            ' lang="en"'+
+            ' formatid="simulation"' +
+            ' xmlns="' + iodef.NS_IODEF +
+        '">' +
+        '<Incident purpose="ext-value" ext-purpose="new-purpose" lang="en" restriction="need-to-know">' +
+            '<IncidentID name="cert.example.com" instance="5" restriction="private">189493</IncidentID>' +
+            '<ReportTime>2014-03-27T12:39:24+00:00</ReportTime>' +
+            '<Assessment occurrence="actual" restriction="private">' +
+                '<Impact lang="en" severity="medium" completion="succeeded" type="ext-value" ext-type="new-type">' +
+                    'A new type of attack has taken all of our printers offline.' +
+                '</Impact>' +
+            '</Assessment>' +
+            '<Contact role="ext-value" ext-role="new-role" '  +
+                        'type="ext-value" ext-type="new-type" restriction="public">' +
+                '<ContactName>Bill Folds</ContactName>' +
+                '<Email meaning="IRT group address, manned Mon-Fri 9-5 UTC">contact@cert.example.com</Email>' +
+            '</Contact>' +
+        '</Incident>' +
+        '</IODEF-Document>'
+
+    it('Should parse a basic IODEF document', function() {
+
+        var iodefDocument = iodefXml
+        var expected = iodefJson
+
+        parser.parse(ltx.parse(iodefDocument)).should.eql(expected)
+    })
+
+    it('Should build a basic IODEF document', function() {
+
+        var emptyIodefDocument = '<item/>'
+        var stanza = ltx.parse(emptyIodefDocument)
+
+        var entity = iodefJson
+        var expected = iodefXml
+
+        parser.build(entity, stanza)
+        stanza.root().getChild('IODEF-Document').toString().should.equal(expected)
+    })
 })

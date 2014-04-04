@@ -12,7 +12,7 @@ parser.setLogger({
 
 describe('Parsing \'IODEF\'', function() {
 
-    var IODEF_DOC_START = '<IODEF-Document version="1.00" xmlns="' + parser.NS_IODEF + '">'
+    var IODEF_DOC_START = '<IODEF-Document version="' + parser.VERSION_IODEF + '" xmlns="' + parser.NS_IODEF + '">'
     var IODEF_DOC_END = '</IODEF-Document>'
     var IODEF_INCIDENT_START = '<Incident purpose="reporting">'
     var IODEF_INCIDENT_END = '</Incident>'
@@ -33,23 +33,31 @@ describe('Parsing \'IODEF\'', function() {
 
     it('Adds version attribute to IODEF-Document', function() {
         var entity = {}
-        var item   = ltx.parse('<IODEF-Document version="1.00" xmlns="' + parser.NS_IODEF + '"/>')
+        var item   = ltx.parse('<IODEF-Document ' +
+                                    'version="' + parser.VERSION_IODEF + '" ' +
+                                    'xmlns="' + parser.NS_IODEF + '"/>')
         parser.parse(item, entity)
-        entity['IODEF-Document'].should.eql({ version : '1.00'})
+        entity['IODEF-Document'].should.eql({ version : parser.VERSION_IODEF})
     })
 
     it('Adds lang attribute to IODEF-Document', function() {
         var entity = {}
-        var item   = ltx.parse('<IODEF-Document version="1.00" lang="en" xmlns="' + parser.NS_IODEF + '"/>')
+        var item   = ltx.parse('<IODEF-Document  ' +
+                                    'version="' + parser.VERSION_IODEF + '"  ' +
+                                    'lang="en"  ' +
+                                    'xmlns="' + parser.NS_IODEF + '"/>')
         parser.parse(item, entity)
-        entity['IODEF-Document'].should.eql({ version : '1.00', lang : 'en'})
+        entity['IODEF-Document'].should.eql({ version : parser.VERSION_IODEF, lang : 'en'})
     })
 
     it('Adds formatid attribute to IODEF-Document', function() {
         var entity = {}
-        var item   = ltx.parse('<IODEF-Document version="1.00" formatid="simulation" xmlns="' + parser.NS_IODEF + '"/>')
+        var item   = ltx.parse('<IODEF-Document  ' +
+                                    'version="' + parser.VERSION_IODEF + '"  ' +
+                                    'formatid="simulation"  ' +
+                                    'xmlns="' + parser.NS_IODEF + '"/>')
         parser.parse(item, entity)
-        entity['IODEF-Document'].should.eql({ version : '1.00', formatid : 'simulation'})
+        entity['IODEF-Document'].should.eql({ version : parser.VERSION_IODEF, formatid : 'simulation'})
     })
 
     describe('Parsing Incident within \'IODEF\'', function() {
@@ -62,7 +70,7 @@ describe('Parsing \'IODEF\'', function() {
                 IODEF_DOC_END
             )
             parser.parse(item, entity)
-            entity['IODEF-Document'].should.eql({version : '1.00', Incidents : [{}]})
+            entity['IODEF-Document'].should.eql({version : parser.VERSION_IODEF, Incidents : [{}]})
         })
 
         it('Adds multiple Incidents', function() {
@@ -74,7 +82,7 @@ describe('Parsing \'IODEF\'', function() {
                 IODEF_DOC_END
             )
             parser.parse(item, entity)
-            entity['IODEF-Document'].should.eql({version : '1.00', Incidents : [{}, {}]})
+            entity['IODEF-Document'].should.eql({version : parser.VERSION_IODEF, Incidents : [{}, {}]})
         })
 
         it('Adds purpose attribute to Incident', function() {
@@ -584,19 +592,546 @@ describe('Parsing \'IODEF\'', function() {
                 })
             })
         })
-
-
     })
 })
 
 /* jshint -W030 */
 describe('Building stanzas with \'IODEF\'', function() {
 
-    it('Doesn\'t touch stanza if no \'IODEF-Document\' attribute', function() {
-        var stanza = ltx.parse('<IODEF-Document/>')
+    var ELEMENT_TO_BUILD_INTO = '<item/>'
+
+    it('Doesn\'t touch stanza if no IODEF-Dicument attribute', function() {
+        var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
         var original = ltx.parse(stanza.toString())
+
         var entity = {}
         parser.build(entity, stanza)
         stanza.root().toString().should.equal(original.toString())
+    })
+
+    it('Doesn\'t touch stanza if incorrect IODEF version specified', function() {
+        var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+        var original = ltx.parse(stanza.toString())
+
+        var entity = {
+            'IODEF-Document': {
+                version: '0.00',
+            }
+        }
+        parser.build(entity, stanza)
+        stanza.root().toString().should.equal(original.toString())
+    })
+
+    describe('Building Incident stanza within \'IODEF\'', function() {
+
+        it('Can add single Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{}],
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+            iodef.getChildren('Incident').length.should.equal(1)
+        })
+
+        it('Can add multiple Incident elements', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{}, {}],
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+            iodef.getChildren('Incident').length.should.equal(2)
+        })
+
+        it('Can add attributes to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        'purpose' : 'ext-value',
+                        'lang' : 'en',
+                        'restriction' : 'private',
+                        'ext-purpose' : 'new-purpose',
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').attrs.purpose
+                .should.equal(entity['IODEF-Document'].Incidents[0].purpose)
+
+            iodef.getChild('Incident').attrs.lang
+                .should.equal(entity['IODEF-Document'].Incidents[0].lang)
+
+            iodef.getChild('Incident').attrs.restriction
+                .should.equal(entity['IODEF-Document'].Incidents[0].restriction)
+
+            iodef.getChild('Incident').attrs['ext-purpose']
+                .should.equal(entity['IODEF-Document'].Incidents[0]['ext-purpose'])
+        })
+
+    })
+
+    describe('Building IncidentID stanza within \'IODEF\'', function() {
+
+        it('Can add IncidentID to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        IncidentID : {
+                            IncidentID : '1234',
+                        }
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChildText('IncidentID')
+                .should.equal(entity['IODEF-Document'].Incidents[0].IncidentID.IncidentID)
+        })
+
+        it('Can add attributes to IncidentID element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        IncidentID : {
+                            name : 'cert.example.com',
+                            instance : '5',
+                            restriction : 'need-to-know',
+                        }
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChild('IncidentID').attrs.name
+                .should.equal(entity['IODEF-Document'].Incidents[0].IncidentID.name)
+
+            iodef.getChild('Incident').getChild('IncidentID').attrs.instance
+                .should.equal(entity['IODEF-Document'].Incidents[0].IncidentID.instance)
+
+            iodef.getChild('Incident').getChild('IncidentID').attrs.restriction
+                .should.equal(entity['IODEF-Document'].Incidents[0].IncidentID.restriction)
+        })
+    })
+
+    describe('Building ReportTime stanza within \'IODEF\'', function() {
+
+        it('Can add ReportTime to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        ReportTime : {
+                            ReportTime : '2014-03-27T12:39:24+00:00',
+                        }
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChildText('ReportTime')
+                .should.equal(entity['IODEF-Document'].Incidents[0].ReportTime.ReportTime)
+        })
+    })
+
+    describe('Building Assessment stanza within \'IODEF\'', function() {
+
+        it('Can add Assessment to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        Assessments : [{}]
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChildren('Assessment').length.should.equal(1)
+        })
+
+        it('Can add multiple Assessments to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        Assessments : [{}, {}]
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChildren('Assessment').length.should.equal(2)
+        })
+
+        it('Can add attributes to Assessment element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        Assessments : [{
+                            occurrence : 'potential',
+                            restriction : 'private',
+                        }]
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChild('Assessment').attrs.occurrence
+                .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].occurrence)
+
+            iodef.getChild('Incident').getChild('Assessment').attrs.restriction
+                .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].restriction)
+        })
+
+        describe('Building Impact stanza within \'IODEF\'', function() {
+
+            it('Can add Impact to Assessment element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Assessments : [
+                                {Impacts : [{Impact : 'Still under investigation, could increase.'}]}
+                            ]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Assessment').getChildren('Impact').length.should.equal(1)
+
+                iodef.getChild('Incident').getChild('Assessment').getChildText('Impact')
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].Impacts[0].Impact)
+            })
+
+            it('Can add multiple Impacts to Assessment element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Assessments : [
+                                {Impacts : [{}, {}]}
+                            ]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Assessment').getChildren('Impact').length.should.equal(2)
+            })
+
+            it('Can add attributes to Impact element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Assessments : [
+                                {Impacts : [{
+                                    'lang' : 'en',
+                                    'severity' : 'medium',
+                                    'completion' : 'succeeded',
+                                    'type' : 'ext-value',
+                                    'ext-type' : 'new-type',
+                                }]}
+                            ]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Assessment').getChild('Impact').attrs.lang
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].Impacts[0].lang)
+
+                iodef.getChild('Incident').getChild('Assessment').getChild('Impact').attrs.severity
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].Impacts[0].severity)
+
+                iodef.getChild('Incident').getChild('Assessment').getChild('Impact').attrs.completion
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].Impacts[0].completion)
+
+                iodef.getChild('Incident').getChild('Assessment').getChild('Impact').attrs.type
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].Impacts[0].type)
+
+                iodef.getChild('Incident').getChild('Assessment').getChild('Impact').attrs['ext-type']
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Assessments[0].Impacts[0]['ext-type'])
+            })
+        })
+    })
+
+    describe('Building Contact stanza within \'IODEF\'', function() {
+
+        it('Can add Contact to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        Contacts : [{}]
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChildren('Contact').length.should.equal(1)
+        })
+
+        it('Can add multiple Contacts to Incident element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        Contacts : [{}, {}]
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChildren('Contact').length.should.equal(2)
+        })
+
+        it('Can add attributes to Contact element', function() {
+            var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+            var entity = {
+                'IODEF-Document': {
+                    version: parser.VERSION_IODEF,
+                    lang: 'en',
+                    formatid: 'simulation',
+                    Incidents: [{
+                        Contacts : [{
+                            'role' : 'ext-value',
+                            'ext-role' : 'new-role',
+                            'type' : 'ext-value',
+                            'ext-type' : 'new-value',
+                            'restriction' : 'public',
+                        }]
+                    }]
+                }
+            }
+
+            parser.build(entity, stanza)
+
+            var iodef = stanza.getChild('IODEF-Document')
+
+            iodef.getChild('Incident').getChild('Contact').attrs.role
+                .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0].role)
+
+            iodef.getChild('Incident').getChild('Contact').attrs['ext-role']
+                .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0]['ext-role'])
+
+            iodef.getChild('Incident').getChild('Contact').attrs.type
+                .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0].type)
+
+            iodef.getChild('Incident').getChild('Contact').attrs['ext-type']
+                .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0]['ext-type'])
+
+            iodef.getChild('Incident').getChild('Contact').attrs.restriction
+                .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0].restriction)
+        })
+
+        describe('Building ContactName stanza within \'IODEF\'', function() {
+
+            it('Can add ContactName to Contact element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Contacts : [{ContactName : {ContactName : 'Bill Folds'}}]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Contact').getChildText('ContactName')
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0].ContactName.ContactName)
+            })
+        })
+
+        describe('Building Email stanza within \'IODEF\'', function() {
+
+            it('Can add Email to Contact element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Contacts : [
+                                {Emails : [{Email : 'contact@cert.example.com'}]}
+                            ]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Contact').getChildren('Email').length.should.equal(1)
+
+                iodef.getChild('Incident').getChild('Contact').getChildText('Email')
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0].Emails[0].Email)
+            })
+
+            it('Can add multiple Emails to Contact element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Contacts : [
+                                {Emails : [{}, {}]}
+                            ]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Contact').getChildren('Email').length.should.equal(2)
+            })
+
+            it('Can add attributes to Email element', function() {
+                var stanza = ltx.parse(ELEMENT_TO_BUILD_INTO)
+
+                var entity = {
+                    'IODEF-Document': {
+                        version: parser.VERSION_IODEF,
+                        lang: 'en',
+                        formatid: 'simulation',
+                        Incidents: [{
+                            Contacts : [
+                                {Emails : [{meaning : 'General enquiries'}]}
+                            ]
+                        }]
+                    }
+                }
+
+                parser.build(entity, stanza)
+
+                var iodef = stanza.getChild('IODEF-Document')
+
+                iodef.getChild('Incident').getChild('Contact').getChild('Email').attrs.meaning
+                    .should.equal(entity['IODEF-Document'].Incidents[0].Contacts[0].Emails[0].meaning)
+            })
+        })
     })
 })
