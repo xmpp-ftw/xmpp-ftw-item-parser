@@ -1,17 +1,21 @@
 'use strict';
 
-var atom            = require('./lib/atom')
-  , activityStreams = require('./lib/activity-streams')
-  , plain           = require('./lib/plain')
-  , json            = require('./lib/json')
-  , tune            = require('./lib/tune')
+var availableParsers
+exports.availableParsers = availableParsers = {
+    atom            : require('./lib/atom'),
+    activityStreams : require('./lib/activity-streams'),
+    plain           : require('./lib/plain'),
+    json            : require('./lib/json'),
+    tune            : require('./lib/tune'),
+    iodef           : require('./lib/iodef'),
+}
 
-var parsers = [
-    tune,
-    json,
-    atom,
-    activityStreams,
-    plain
+var enabledParsers = [
+    availableParsers.tune,
+    availableParsers.json,
+    availableParsers.atom,
+    availableParsers.activityStreams,
+    availableParsers.plain,
 ]
 
 var logger
@@ -31,13 +35,13 @@ var getLogger = function() {
     return logger
 }
 
-parsers.forEach(function(parser) {
+enabledParsers.forEach(function(parser) {
     parser.setLogger(getLogger())
 })
 
 exports.parse = function(item) {
     var entity = {}
-    parsers.forEach(function(parser) {
+    enabledParsers.forEach(function(parser) {
         try {
             parser.parse(item, entity)
         } catch (e) {
@@ -48,8 +52,39 @@ exports.parse = function(item) {
 }
 
 exports.build = function(data, stanza) {
-
-    parsers.forEach(function(parser) {
+    enabledParsers.forEach(function(parser) {
         parser.build(data, stanza)
     })
+}
+
+var addParser
+exports.addParser = addParser = function(parserToAdd) {
+    var index = enabledParsers.indexOf(parserToAdd)
+    if (index === -1) {
+        parserToAdd.setLogger(getLogger())
+        enabledParsers.push(parserToAdd)
+    }
+}
+
+exports.removeParser = function(parserToRemove) {
+    var index = enabledParsers.indexOf(parserToRemove)
+    if (index > -1) {
+        enabledParsers.splice(index, 1)
+    }
+}
+
+var removeAllParsers
+exports.removeAllParsers = removeAllParsers = function() {
+    enabledParsers = []
+}
+
+exports.setParsers = function(newParsers) {
+    removeAllParsers()
+    newParsers.forEach(function(parserToAdd) {
+        addParser(parserToAdd)
+    })
+}
+
+exports.getParsers = function() {
+    return enabledParsers
 }
