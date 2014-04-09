@@ -161,11 +161,11 @@ describe('Parser injection', function() {
     beforeEach(function() {
         parser.setParsers(defaultParsers)
         parserCount = parser.getParsers().length
-    });
+    })
 
     after(function() {
         parser.setParsers(defaultParsers)
-    });
+    })
 
     it('Should not include iodef parser by default', function() {
         defaultParsers.should.not.include(parser.availableParsers.iodef)
@@ -270,11 +270,11 @@ describe('IODEF support', function() {
 
     before(function(){
         parser.addParser(parser.availableParsers.iodef)
-    });
+    })
 
     after(function(){
         parser.removeParser(parser.availableParsers.iodef)
-    });
+    })
 
     it('Should parse a basic IODEF document', function() {
         var iodefDocument = iodefXml
