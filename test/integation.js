@@ -153,6 +153,51 @@ describe('Parsing ATOM feed with activity streams', function() {
 
 })
 
+describe('Parser injection', function() {
+
+    var defaultParsers = parser.getParsers().slice(0)
+    var parserCount = parser.getParsers().length
+
+    beforeEach(function() {
+        parser.setParsers(defaultParsers)
+        parserCount = parser.getParsers().length
+    });
+
+    after(function() {
+        parser.setParsers(defaultParsers)
+    });
+
+    it('Should not include iodef parser by default', function() {
+        defaultParsers.should.not.include(parser.availableParsers.iodef)
+    })
+
+    it('Should add an available parser to enabled parsers', function() {
+        parser.addParser(parser.availableParsers.iodef)
+        parser.getParsers().should.have.length(parserCount + 1)
+    })
+
+    it('Should remove a parser from enabled parsers', function() {
+        parser.removeParser(parser.availableParsers.json)
+        parser.getParsers().should.have.length(parserCount - 1)
+    })
+
+    it('Should remove all enabled parsers', function() {
+        parser.removeAllParsers()
+        parser.getParsers().should.have.length(0)
+    })
+
+    it('Should set all enabled parsers in a single call', function() {
+        parser.setParsers([parser.availableParsers.json, parser.availableParsers.iodef])
+        parser.getParsers().should.have.length(2)
+    })
+
+    it('Should not add the same parser more than once', function() {
+        parser.addParser(parser.availableParsers.iodef)
+        parser.addParser(parser.availableParsers.iodef)
+        parser.getParsers().should.have.length(parserCount + 1)
+    })
+})
+
 describe('IODEF support', function() {
 
     var iodefJson = {
@@ -223,8 +268,15 @@ describe('IODEF support', function() {
         '</Incident>' +
         '</IODEF-Document>'
 
-    it('Should parse a basic IODEF document', function() {
+    before(function(){
+        parser.addParser(parser.availableParsers.iodef)
+    });
 
+    after(function(){
+        parser.removeParser(parser.availableParsers.iodef)
+    });
+
+    it('Should parse a basic IODEF document', function() {
         var iodefDocument = iodefXml
         var expected = iodefJson
 
@@ -232,7 +284,6 @@ describe('IODEF support', function() {
     })
 
     it('Should build a basic IODEF document', function() {
-
         var emptyIodefDocument = '<item/>'
         var stanza = ltx.parse(emptyIodefDocument)
 
