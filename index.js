@@ -59,7 +59,7 @@ exports.build = function(data, stanza) {
 
 var addParser
 exports.addParser = addParser = function(parserToAdd) {
-    var index = enabledParsers.indexOf(parserToAdd);
+    var index = enabledParsers.indexOf(parserToAdd)
     if (index === -1) {
         parserToAdd.setLogger(getLogger())
         enabledParsers.push(parserToAdd)
@@ -67,9 +67,9 @@ exports.addParser = addParser = function(parserToAdd) {
 }
 
 exports.removeParser = function(parserToRemove) {
-    var index = enabledParsers.indexOf(parserToRemove);
+    var index = enabledParsers.indexOf(parserToRemove)
     if (index > -1) {
-        enabledParsers.splice(index, 1);
+        enabledParsers.splice(index, 1)
     }
 }
 
