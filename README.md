@@ -23,31 +23,31 @@ $ npm i --save xmpp-ftw-item-parser
 It is possible to configure this component to only enable parsers for the formats you wish to handle in your application. A set of common parsers are enabled by default but some will need to be enabled depending on the needs of your application.
 
 The following example shows how to add the IODEF parser to the standard set of enabled parsers:
-``` js
+```javascript
 parser.addParser(parser.availableParsers.iodef)
 ```
 
 Removing a parser from the set of enabled parsers is equally simple: 
-``` js
+```javascript
 parser.removeParser(parser.availableParsers.activityStreams)
 ```
 
 The full list of available parsers is available from `parser.availableParsers`. 
 
 As well as adding and removing individual parsers you are also able to define a list of parsers to add in a single call. The following example replaces the default set of parsers with the JSON and IODEF parsers.
-``` js
+```javascript
 parser.setParsers([parser.availableParsers.json, parser.availableParsers.iodef])
 ```
 
 You can, if you wish, remove all parsers from the list of enabled parsers using the following call: 
-``` js
+```javascript
 parser.removeAllParsers()
 ```
 
 ## IODEF
 The IODEF parser will translate between XML and JSON in both directions. The following JSON and XML documents represent the complete set of elements and attributes currently supported:
 
-``` xml
+```xml
 <IODEF-Document version="1.00" lang="en" formatid="simulation" xmlns="urn:ietf:params:xml:ns:iodef-1.0">
 <Incident purpose="ext-value" ext-purpose="new-purpose" lang="en" restriction="need-to-know">
     <IncidentID name="cert.example.com" instance="5" restriction="private">189493</IncidentID>
@@ -65,7 +65,7 @@ The IODEF parser will translate between XML and JSON in both directions. The fol
 </IODEF-Document>
 ```
 
-``` json
+```json
 {
     "IODEF-Document" : {
         "version" : "1.00",
@@ -115,7 +115,7 @@ The IODEF parser will translate between XML and JSON in both directions. The fol
 Note that support is provided for multiple elements where permitted by the specification (currently `Incident`, `Assessment`, `Impact`, `Contact`, `Email`).
 
 The following example shows how an XML IODEF document can be parsed into JSON:
-``` js
+```javascript
 var iodefXml = '' +
     '<IODEF-Document'  +
         ' version="' + iodef.VERSION_IODEF + '"' +
@@ -144,7 +144,7 @@ var iodefJson = parser.parse(iodefXml)
 ```
 
 The following example shows how IODEF in JSON format can be built into a valid IODEF XML document:
-``` js
+```javascript
 var iodefJson = {
     'IODEF-Document': {
         version: iodef.VERSION_IODEF,
