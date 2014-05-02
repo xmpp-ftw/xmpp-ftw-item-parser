@@ -7,6 +7,7 @@ exports.availableParsers = availableParsers = {
     plain           : require('./lib/plain'),
     json            : require('./lib/json'),
     tune            : require('./lib/tune'),
+    media           : require('./lib/media'),
     iodef           : require('./lib/iodef'),
 }
 
@@ -14,6 +15,7 @@ var enabledParsers = [
     availableParsers.tune,
     availableParsers.json,
     availableParsers.atom,
+    availableParsers.media,
     availableParsers.activityStreams,
     availableParsers.plain,
 ]

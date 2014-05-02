@@ -294,3 +294,83 @@ describe('IODEF support', function() {
         stanza.root().getChild('IODEF-Document').toString().should.equal(expected)
     })
 })
+
+describe('Buddycloud media posts', function() {
+    
+    it('Should parse a full stanza', function() {
+        var expected = {
+            atom: {
+                title: 'Back to the future quote of the day',
+                published: '2014-01-13T13:19:00.000Z',
+                content: {
+                    content: '<p>Where we\'re going we don\'t need roads!</p>',
+                    type: 'xhtml',
+                    lang: 'en_GB',
+                    base: 'http://doc.brown.org'
+                },
+                author: {
+                    name: 'Doc Brown'
+                }
+            },
+            media: [ '12345', '67890' ]
+        }
+        var stanza = '' +
+            '<item><entry xmlns="' + atom.NS_ATOM + '">' +
+                '<content xml:lang="en_GB" xml:base="http://doc.brown.org" type="xhtml">' +
+                    '<p>Where we\'re going we don\'t need roads!</p>' +
+                '</content>' +
+                '<title>Back to the future quote of the day</title>' +
+                '<published>2014-01-13T13:19:00.000Z</published>' +
+                '<author>' +
+                    '<name>Doc Brown</name>' +
+                    '<' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                        'person' +
+                    '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
+                '</author>' +
+                '<media>' +
+                    '<item>12345</item>' +
+                    '<item>67890</item>'+
+                '</media>' +
+            '</entry></item>'
+        parser.parse(ltx.parse(stanza)).should.eql(expected)
+    })
+        
+    it('Can build an atom feed with <media/>', function() {
+        var stanza = ltx.parse('<item/>')
+        var entity = {
+            atom: {
+                content: {
+                    content: '<p>Where we\'re going we don\'t need roads!</p>',
+                    lang: 'en_GB',
+                    base: 'http://doc.brown.org',
+                    type: 'xhtml'
+                },
+                title: 'Back to the future quote of the day',
+                published: '2014-01-13T13:19:00.000Z',
+                author: {
+                    name: 'Doc Brown'
+                }
+            },
+            media: [ '12345', '67890' ]
+        }
+        parser.build(entity, stanza)
+        var expected = '' +
+            '<item><entry xmlns="' + atom.NS_ATOM + '">' +
+                '<content xml:lang="en_GB" xml:base="http://doc.brown.org" type="xhtml">' +
+                    '<p>Where we\'re going we don\'t need roads!</p>' +
+                '</content>' +
+                '<title>Back to the future quote of the day</title>' +
+                '<published>2014-01-13T13:19:00.000Z</published>' +
+                '<author>' +
+                    '<name>Doc Brown</name>' +
+                '</author>' +
+                '<media>' +
+                    '<item>12345</item>' +
+                    '<item>67890</item>'+
+                '</media>' +
+            '</entry></item>'
+        
+        stanza.root().toString().should.equal(expected)
+    })
+
+})
