@@ -60,6 +60,18 @@ describe('Parsing \'IODEF\'', function() {
         entity['IODEF-Document'].should.eql({ version : parser.VERSION_IODEF, formatid : 'simulation'})
     })
 
+    it('Should parse IODEF if wrapped in another element', function() {
+        var entity = {}
+        var item = ltx.parse(
+            '<item>' +
+                IODEF_DOC_START +
+                IODEF_DOC_END +
+            '</item>'
+        )
+        parser.parse(item, entity)
+        entity['IODEF-Document'].should.eql({version : parser.VERSION_IODEF})
+    })
+
     describe('Parsing Incident within \'IODEF\'', function() {
 
         it('Adds Incident', function() {
