@@ -6,6 +6,7 @@ var parser = require('../index')
 var activityStreams = require('../lib/activity-streams')
   , atom = require('../lib/atom')
   , iodef = require('../lib/iodef')
+  , buddycloud = require('../lib/media')
 
 describe('Building ATOM feed with thread', function() {
 
@@ -315,7 +316,8 @@ describe('Buddycloud media posts', function() {
             media: [ '12345', '67890' ]
         }
         var stanza = '' +
-            '<item><entry xmlns="' + atom.NS_ATOM + '">' +
+            '<item><entry xmlns="' + atom.NS_ATOM + '" xmlns:bcm="' +
+                buddycloud.NS_BUDDYCLOUD_MEDIA + '">' +
                 '<content xml:lang="en_GB" xml:base="http://doc.brown.org" type="xhtml">' +
                     '<p>Where we\'re going we don\'t need roads!</p>' +
                 '</content>' +
@@ -327,10 +329,10 @@ describe('Buddycloud media posts', function() {
                         'person' +
                     '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
                 '</author>' +
-                '<media>' +
-                    '<item>12345</item>' +
-                    '<item>67890</item>'+
-                '</media>' +
+                '<bcm:media>' +
+                    '<bcm:item>12345</bcm:item>' +
+                    '<bcm:item>67890</bcm:item>'+
+                '</bcm:media>' +
             '</entry></item>'
         parser.parse(ltx.parse(stanza)).should.eql(expected)
     })
@@ -355,7 +357,8 @@ describe('Buddycloud media posts', function() {
         }
         parser.build(entity, stanza)
         var expected = '' +
-            '<item><entry xmlns="' + atom.NS_ATOM + '">' +
+            '<item><entry xmlns="' + atom.NS_ATOM + '" xmlns:bcm="' +
+                buddycloud.NS_BUDDYCLOUD_MEDIA + '">' +
                 '<content xml:lang="en_GB" xml:base="http://doc.brown.org" type="xhtml">' +
                     '<p>Where we\'re going we don\'t need roads!</p>' +
                 '</content>' +
@@ -364,10 +367,10 @@ describe('Buddycloud media posts', function() {
                 '<author>' +
                     '<name>Doc Brown</name>' +
                 '</author>' +
-                '<media>' +
-                    '<item>12345</item>' +
-                    '<item>67890</item>'+
-                '</media>' +
+                '<bcm:media>' +
+                    '<bcm:item>12345</bcm:item>' +
+                    '<bcm:item>67890</bcm:item>'+
+                '</bcm:media>' +
             '</entry></item>'
         
         stanza.root().toString().should.equal(expected)
