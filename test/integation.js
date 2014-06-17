@@ -329,10 +329,10 @@ describe('Buddycloud media posts', function() {
                         'person' +
                     '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
                 '</author>' +
-                '<bcm:media>' +
-                    '<bcm:item>12345</bcm:item>' +
-                    '<bcm:item>67890</bcm:item>'+
-                '</bcm:media>' +
+                '<' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
+                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="12345" />' +
+                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="67890" />'+
+                '</' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
             '</entry></item>'
         parser.parse(ltx.parse(stanza)).should.eql(expected)
     })
@@ -367,10 +367,10 @@ describe('Buddycloud media posts', function() {
                 '<author>' +
                     '<name>Doc Brown</name>' +
                 '</author>' +
-                '<bcm:media>' +
-                    '<bcm:item>12345</bcm:item>' +
-                    '<bcm:item>67890</bcm:item>'+
-                '</bcm:media>' +
+                '<' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
+                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="12345"/>' +
+                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="67890"/>'+
+                '</' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
             '</entry></item>'
         
         stanza.root().toString().should.equal(expected)

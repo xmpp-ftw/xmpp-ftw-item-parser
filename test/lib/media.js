@@ -18,7 +18,7 @@ describe('Buddycloud Media', function() {
             '<item><entry xmlns="' + parser.NS_ATOM + '" ' +
                 'xmlns:bcm="' + parser.NS_BUDDYCLOUD_MEDIA + '">' +
             '<bcm:media>' +
-            '<bcm:item >12345</bcm:item><bcm:item>67890</bcm:item>' +
+            '<bcm:item id="12345" /><bcm:item id="67890" />' +
             '</bcm:media>' +
             '</entry></item>'
         )
@@ -41,8 +41,8 @@ describe('Buddycloud Media', function() {
                 .getChild('media')
                 .getChildren('item')
             items.length.should.equal(2)
-            items[0].getText().should.equal(data.media[0])
-            items[1].getText().should.equal(data.media[1])
+            items[0].attr('id').should.equal(data.media[0])
+            items[1].attr('id').should.equal(data.media[1])
         })
 
     })
