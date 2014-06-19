@@ -316,8 +316,7 @@ describe('Buddycloud media posts', function() {
             media: [ '12345', '67890' ]
         }
         var stanza = '' +
-            '<item><entry xmlns="' + atom.NS_ATOM + '" xmlns:bcm="' +
-                buddycloud.NS_BUDDYCLOUD_MEDIA + '">' +
+            '<item><entry xmlns="' + atom.NS_ATOM + '">' +
                 '<content xml:lang="en_GB" xml:base="http://doc.brown.org" type="xhtml">' +
                     '<p>Where we\'re going we don\'t need roads!</p>' +
                 '</content>' +
@@ -329,14 +328,14 @@ describe('Buddycloud media posts', function() {
                         'person' +
                     '</' + activityStreams.PREFIX_NS_ACTIVITY + ':object-type>' +
                 '</author>' +
-                '<' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
-                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="12345" />' +
-                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="67890" />'+
-                '</' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
+                '<media xmlns="' + buddycloud.NS_BUDDYCLOUD_MEDIA + '">' +
+                    '<item id="12345" />' +
+                    '<item id="67890" />'+
+                '</media>' +
             '</entry></item>'
         parser.parse(ltx.parse(stanza)).should.eql(expected)
     })
-        
+
     it('Can build an atom feed with <media/>', function() {
         var stanza = ltx.parse('<item/>')
         var entity = {
@@ -357,8 +356,7 @@ describe('Buddycloud media posts', function() {
         }
         parser.build(entity, stanza)
         var expected = '' +
-            '<item><entry xmlns="' + atom.NS_ATOM + '" xmlns:bcm="' +
-                buddycloud.NS_BUDDYCLOUD_MEDIA + '">' +
+            '<item><entry xmlns="' + atom.NS_ATOM + '">' +
                 '<content xml:lang="en_GB" xml:base="http://doc.brown.org" type="xhtml">' +
                     '<p>Where we\'re going we don\'t need roads!</p>' +
                 '</content>' +
@@ -367,10 +365,10 @@ describe('Buddycloud media posts', function() {
                 '<author>' +
                     '<name>Doc Brown</name>' +
                 '</author>' +
-                '<' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
-                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="12345"/>' +
-                    '<' + buddycloud.NS_PREFIX_MEDIA + ':item id="67890"/>'+
-                '</' + buddycloud.NS_PREFIX_MEDIA + ':media>' +
+                '<media xmlns="http://buddycloud.org/v1/media">' +
+                    '<item id="12345"/>' +
+                    '<item id="67890"/>'+
+                '</media>' +
             '</entry></item>'
         
         stanza.root().toString().should.equal(expected)

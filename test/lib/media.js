@@ -15,11 +15,10 @@ describe('Buddycloud Media', function() {
     describe('Parsing posts with \'media\'', function() {
 
         var item = ltx.parse(
-            '<item><entry xmlns="' + parser.NS_ATOM + '" ' +
-                'xmlns:bcm="' + parser.NS_BUDDYCLOUD_MEDIA + '">' +
-            '<bcm:media>' +
-            '<bcm:item id="12345" /><bcm:item id="67890" />' +
-            '</bcm:media>' +
+            '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+            '<media xmlns="' + parser.NS_BUDDYCLOUD_MEDIA + '">' +
+            '<item id="12345" /><bcm:item id="67890" />' +
+            '</media>' +
             '</entry></item>'
         )
         
