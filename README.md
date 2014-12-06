@@ -208,6 +208,3 @@ var iodefXml = parser.build(iodefJson, elementToBuildInto)
     * `Contact`
         * `ContactName`
         * `Email`
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/xmpp-ftw/xmpp-ftw-item-parser/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
