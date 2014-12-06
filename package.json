@@ -23,7 +23,7 @@
     "parser"
   ],
   "dependencies": {
-    "ltx": "^0.6.2"
+    "ltx": "^0.7.2"
   },
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "Apache 2.0",
@@ -36,8 +36,8 @@
     "coveralls": "^2.11.2",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-mocha-cli": "~1.4.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-mocha-cli": "^1.11.0",
     "grunt-mocha-istanbul": "^2.2.0",
     "istanbul": "^0.3.4",
     "mocha": "^2.0.1",
