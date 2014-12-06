@@ -11,6 +11,8 @@ from JSON objects.
 
 [![Build Status](https://secure.travis-ci.org/xmpp-ftw/xmpp-ftw-item-parser.png)](http://travis-ci.org/xmpp-ftw/xmpp-ftw-item-parser)
 
+[![Coverage Status](https://img.shields.io/coveralls/xmpp-ftw/xmpp-ftw-item-parser.svg)](https://coveralls.io/r/xmpp-ftw/xmpp-ftw-item-parser)
+
 # Install
 
 ``` bash
