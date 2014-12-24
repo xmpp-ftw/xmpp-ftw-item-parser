@@ -323,5 +323,48 @@ describe('Building stanzas with \'atom\'', function() {
         links[1].attrs.type.should.equal(entity.atom.links[1].type)
         links[1].attrs.length.should.equal(entity.atom.links[1].length)
     })
+    
+    it('Can add content attributes', function() {
+        var entity = {
+            atom: {
+                content: {
+                    base: 'http://doc.brown',
+                    lang: 'en_US',
+                    type: 'text',
+                    content: 'Great Scott!'
+                }
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var content = stanza.getChild('entry')
+            .getChild('content')
+        content.attrs['xml:lang'].should.equal('en_US')
+        content.attrs['xml:base'].should.equal('http://doc.brown')
+        content.attrs.type.should.equal('text')
+        content.getText()
+            .should.equal('Great Scott!')
+        
+    })
 
+    
+    it('Can add XHTML content', function() {
+        var entity = {
+            atom: {
+                content: {
+                    type: 'xhtml',
+                    content: '<p><em>Great Scott!</em></p>'
+                }
+            }
+        }
+        var stanza = ltx.parse('<item/>')
+        parser.build(entity, stanza)
+        var content = stanza.getChild('entry')
+            .getChild('content')
+        content.attrs.type.should.equal('xhtml')
+        content.children.join()
+            .should.equal('<p><em>Great Scott!</em></p>')
+        
+    })
+    
 })
