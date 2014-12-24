@@ -65,6 +65,21 @@ describe('Parsing posts with \'activity streams\'', function() {
         })
     })
     
+    
+    it('Can skip target details', function() {
+        
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '" activity:xmlns="' + parser.NS_ACTIVITY + '">' +
+          '<activity:target />' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({
+            activity: {}
+        })
+    })
+    
     it('Adds rating details', function() {
         var entity = {}
         var item = ltx.parse(
@@ -131,6 +146,20 @@ describe('Parsing posts with \'activity streams\'', function() {
                 }
             }
         })
+    })
+    
+    it('Can skip author details', function() {
+        
+        var entity = {}
+        var item = ltx.parse(
+          '<item><entry xmlns="' + parser.NS_ATOM + '">' +
+          '<author>' +
+              '<object-type />' +
+          '</author>' +
+          '</entry></item>'
+        )
+        parser.parse(item, entity)
+        entity.should.eql({})
     })
     
 })
