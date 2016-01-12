@@ -39,7 +39,7 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-mocha-cli": "^1.11.0",
     "grunt-mocha-istanbul": "^2.2.0",
-    "istanbul": "^0.3.4",
+    "istanbul": "^0.4.2",
     "mocha": "^2.0.1",
     "should": "~1.2.2"
   }
