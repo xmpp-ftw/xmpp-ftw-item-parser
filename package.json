@@ -23,7 +23,7 @@
     "parser"
   ],
   "dependencies": {
-    "ltx": "^0.7.2"
+    "ltx": "^2.3.0"
   },
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "Apache 2.0",
