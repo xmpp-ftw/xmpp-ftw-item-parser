@@ -1,6 +1,8 @@
 xmpp-ftw-item-parser
 ====================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/xmpp-ftw/xmpp-ftw-item-parser.svg)](https://greenkeeper.io/)
+
 Used to parse "standard" XMPP pubsub payloads both from XML→JSON, and build stanzas JSON→XML.
 
 Takes XML in the form of [ltx](https://github.com/astro/ltx) objects and 
